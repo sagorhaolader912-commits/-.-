@@ -8,66 +8,72 @@
         body { font-family: 'Segoe UI', sans-serif; text-align: center; background-color: #f0f4f8; margin: 0; padding: 10px; }
         .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .header { background: #1a73e8; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
-        .btn { padding: 15px; width: 90%; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 5px; font-size: 16px; color: white; transition: 0.3s; }
-        .btn-main { background: #28a745; }
-        .btn-sub { background: #55acee; width: 45%; font-size: 14px; }
-        .btn-back { background: #6c757d; width: 93%; margin-top: 10px; }
-        .btn-edit { background: #f39c12; width: 93%; }
+        .btn-main { padding: 15px; width: 90%; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 5px; font-size: 16px; color: white; background: #28a745; }
+        .btn-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .btn-item { padding: 12px; border: none; border-radius: 8px; cursor: pointer; background: #55acee; color: white; font-weight: bold; }
+        .btn-back { background: #6c757d; width: 93%; margin-top: 15px; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; }
         iframe { width: 100%; height: 500px; border: 1px solid #ddd; border-radius: 10px; margin-top: 20px; display: none; }
-        .menu-section { display: none; }
-        #home-menu { display: block; }
+        #sub-menu { display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h2 style="margin:0;">মেসার্স সাগর ফিস</h2>
+    <div class="header"><h1>মেসার্স সাগর ফিস</h1></div>
+
+    <div id="home-menu">
+        <button class="btn-main" onclick="showSubMenu('Arat')">আড়ৎ এর হিসাব</button>
+        <button class="btn-main" style="background:#e91e63" onclick="showSubMenu('Company')">বিক্রয়ের হিসাব</button>
+        <button class="btn-main" style="background:#f39c12" onclick="window.open('APNAR_SHEET_LINK', '_blank')">✎ নাম পরিবর্তন করুন</button>
     </div>
 
-    <div id="home-menu" class="menu-section">
-        <button class="btn btn-main" onclick="showMenu('arat-menu')">আড়ৎ এর হিসাব</button>
-        <button class="btn btn-main" style="background:#e91e63" onclick="showMenu('bikroy-menu')">বিক্রয়ের হিসাব</button>
-        <button class="btn btn-edit" onclick="window.open('আপনার_গুগল_শিট_লিঙ্ক', '_blank')">✎ নাম বা হিসাব পরিবর্তন করুন</button>
-    </div>
-
-    <div id="arat-menu" class="menu-section">
-        <h3>আড়ৎ এর তালিকা:</h3>
-        <button class="btn btn-sub" onclick="openSheet()">আড়ৎ A</button>
-        <button class="btn btn-sub" onclick="openSheet()">আড়ৎ B</button>
-        <button class="btn btn-sub" onclick="openSheet()">আড়ৎ C</button>
-        <button class="btn btn-sub" onclick="openSheet()">আড়ৎ D</button>
-        <button class="btn btn-back" onclick="showMenu('home-menu')">← পেছনে যান</button>
-    </div>
-
-    <div id="bikroy-menu" class="menu-section">
-        <h3>কোম্পানির তালিকা:</h3>
-        <button class="btn btn-sub" onclick="openSheet()">কোম্পানি ১</button>
-        <button class="btn btn-sub" onclick="openSheet()">কোম্পানি ২</button>
-        <button class="btn btn-sub" onclick="openSheet()">কোম্পানি ৩</button>
-        <button class="btn btn-sub" onclick="openSheet()">কোম্পানি ৪</button>
-        <button class="btn btn-back" onclick="showMenu('home-menu')">← পেছনে যান</button>
+    <div id="sub-menu">
+        <h3 id="menu-title">তালিকা:</h3>
+        <div id="dynamic-buttons" class="btn-list">
+            </div>
+        <button class="btn-back" onclick="goHome()">← পেছনে যান</button>
     </div>
 
     <iframe id="sheetFrame" src=""></iframe>
 </div>
 
 <script>
-    var googleSheetURL = "আপনার_গুগল_শিট_লিঙ্ক";
+    const sheetURL = "APNAR_SHEET_LINK"; // Apnar share kora link-ti eikhane din
 
-    function showMenu(menuId) {
-        // সব মেনু হাইড করা
-        var sections = document.getElementsByClassName('menu-section');
-        for(var i=0; i<sections.length; i++) sections[i].style.display = 'none';
-        // নির্দিষ্ট মেনু শো করা
-        document.getElementById(menuId).style.display = 'block';
-        document.getElementById('sheetFrame').style.display = 'none';
+    // Mone korun ei nam gulo apni Sheet thekeo ante paren, 
+    // apatoto eikhane likhle website-e auto button hoye jabe
+    const data = {
+        'Arat': ['Arat A', 'Arat B', 'Arat C', 'Arat D', 'Arat E', 'Arat F'],
+        'Company': ['Company 1', 'Company 2', 'Company 3']
+    };
+
+    function showSubMenu(type) {
+        document.getElementById('home-menu').style.display = 'none';
+        document.getElementById('sub-menu').style.display = 'block';
+        document.getElementById('menu-title').innerText = type === 'Arat' ? "আড়ৎ এর তালিকা:" : "কোম্পানির তালিকা:";
+        
+        const container = document.getElementById('dynamic-buttons');
+        container.innerHTML = ""; // Clear old buttons
+        
+        data[type].forEach(name => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-item';
+            btn.innerText = name;
+            btn.onclick = () => openSheet(name);
+            container.appendChild(btn);
+        });
     }
 
-    function openSheet() {
-        var frame = document.getElementById('sheetFrame');
+    function openSheet(name) {
+        const frame = document.getElementById('sheetFrame');
         frame.style.display = 'block';
-        frame.src = googleSheetURL + "&rm=minimal";
+        frame.src = sheetURL + "&rm=minimal";
+    }
+
+    function goHome() {
+        document.getElementById('home-menu').style.display = 'block';
+        document.getElementById('sub-menu').style.display = 'none';
+        document.getElementById('sheetFrame').style.display = 'none';
     }
 </script>
 
