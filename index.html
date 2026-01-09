@@ -2,7 +2,6 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>মেসার্স সাগর ফিস</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; text-align: center; background-color: #f0f4f8; margin: 0; padding: 10px; }
@@ -24,13 +23,12 @@
     <div id="home-menu">
         <button class="btn-main" onclick="showSubMenu('Arat')">আড়ৎ এর হিসাব</button>
         <button class="btn-main" style="background:#e91e63" onclick="showSubMenu('Company')">বিক্রয়ের হিসাব</button>
-        <button class="btn-main" style="background:#f39c12" onclick="window.open('APNAR_SHEET_LINK', '_blank')">✎ নাম পরিবর্তন করুন</button>
+        <button class="btn-main" style="background:#f39c12" onclick="window.open('আপনার_গুগল_শিট_লিঙ্ক', '_blank')">✎ নাম বা হিসাব পরিবর্তন করুন</button>
     </div>
 
     <div id="sub-menu">
         <h3 id="menu-title">তালিকা:</h3>
-        <div id="dynamic-buttons" class="btn-list">
-            </div>
+        <div id="dynamic-buttons" class="btn-list"></div>
         <button class="btn-back" onclick="goHome()">← পেছনে যান</button>
     </div>
 
@@ -38,13 +36,13 @@
 </div>
 
 <script>
-    const sheetURL = "APNAR_SHEET_LINK"; // Apnar share kora link-ti eikhane din
+    // ১. আপনার গুগল শিটের শেয়ার লিঙ্কটি এখানে বসান
+    const mySheetLink = "আপনার_গুগল_শিট_লিঙ্ক"; 
 
-    // Mone korun ei nam gulo apni Sheet thekeo ante paren, 
-    // apatoto eikhane likhle website-e auto button hoye jabe
-    const data = {
-        'Arat': ['Arat A', 'Arat B', 'Arat C', 'Arat D', 'Arat E', 'Arat F'],
-        'Company': ['Company 1', 'Company 2', 'Company 3']
+    // ২. এখানে আপনি যত খুশি নাম যোগ করতে পারবেন। শুধু কমা (,) দিয়ে নাম লিখুন।
+    const myData = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120
+        'Arat': ['মালেকা আড়ৎ', 'জননী আড়ৎ', 'সাগর আড়ৎ', 'বিসমিল্লাহ আড়ৎ', 'আড়ৎ E', 'আড়ৎ F'],
+        'Company': [১2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     };
 
     function showSubMenu(type) {
@@ -53,21 +51,21 @@
         document.getElementById('menu-title').innerText = type === 'Arat' ? "আড়ৎ এর তালিকা:" : "কোম্পানির তালিকা:";
         
         const container = document.getElementById('dynamic-buttons');
-        container.innerHTML = ""; // Clear old buttons
+        container.innerHTML = ""; 
         
-        data[type].forEach(name => {
+        myData[type].forEach(name => {
             const btn = document.createElement('button');
             btn.className = 'btn-item';
             btn.innerText = name;
-            btn.onclick = () => openSheet(name);
+            btn.onclick = () => openSheet();
             container.appendChild(btn);
         });
     }
 
-    function openSheet(name) {
+    function openSheet() {
         const frame = document.getElementById('sheetFrame');
         frame.style.display = 'block';
-        frame.src = sheetURL + "&rm=minimal";
+        frame.src = mySheetLink + "&rm=minimal";
     }
 
     function goHome() {
@@ -76,6 +74,5 @@
         document.getElementById('sheetFrame').style.display = 'none';
     }
 </script>
-
 </body>
 </html>
