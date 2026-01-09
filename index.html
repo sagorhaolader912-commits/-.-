@@ -1,23 +1,75 @@
-<div id="dashboard" style="display:none;">
-    <div class="header-bar">
-        <h2>মেসার্স সাগর ফিস - ডিজিটাল ড্যাশবোর্ড</h2>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>মেসার্স সাগর ফিস</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; text-align: center; background-color: #f0f4f8; margin: 0; padding: 10px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .header { background: #1a73e8; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
+        .btn { padding: 15px; width: 90%; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 5px; font-size: 16px; color: white; transition: 0.3s; }
+        .btn-main { background: #28a745; }
+        .btn-sub { background: #55acee; width: 45%; font-size: 14px; }
+        .btn-back { background: #6c757d; width: 93%; margin-top: 10px; }
+        .btn-edit { background: #f39c12; width: 93%; }
+        iframe { width: 100%; height: 500px; border: 1px solid #ddd; border-radius: 10px; margin-top: 20px; display: none; }
+        .menu-section { display: none; }
+        #home-menu { display: block; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2 style="margin:0;">মেসার্স সাগর ফিস</h2>
     </div>
 
-    <div style="background: #fff; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-        <h3>আড়ত নির্বাচন করুন:</h3>
-        <div id="dynamic-arat-buttons">
-            <p>লোডিং হচ্ছে...</p>
-        </div>
-        <hr>
-        <button class="btn" style="background: #f4b400;" onclick="window.open('আপনার_গুগল_শিট_লিঙ্ক')">
-            + নতুন আড়ত যোগ বা নাম পরিবর্তন করুন
-        </button>
+    <div id="home-menu" class="menu-section">
+        <button class="btn btn-main" onclick="showMenu('arat-menu')">আড়ৎ এর হিসাব</button>
+        <button class="btn btn-main" style="background:#e91e63" onclick="showMenu('bikroy-menu')">বিক্রয়ের হিসাব</button>
+        <button class="btn btn-edit" onclick="window.open('আপনার_গুগল_শিট_লিঙ্ক', '_blank')">✎ নাম বা হিসাব পরিবর্তন করুন</button>
     </div>
 
-    <div style="margin-bottom: 20px;">
-        <input type="date" id="searchDate" style="width: 150px;">
-        <button class="btn" onclick="searchByDate()">তারিখ অনুযায়ী হিসাব দেখুন</button>
+    <div id="arat-menu" class="menu-section">
+        <h3>আড়ৎ এর তালিকা:</h3>
+        <button class="btn btn-sub" onclick="openSheet()">আড়ৎ A</button>
+        <button class="btn btn-sub" onclick="openSheet()">আড়ৎ B</button>
+        <button class="btn btn-sub" onclick="openSheet()">আড়ৎ C</button>
+        <button class="btn btn-sub" onclick="openSheet()">আড়ৎ D</button>
+        <button class="btn btn-back" onclick="showMenu('home-menu')">← পেছনে যান</button>
     </div>
 
-    <iframe id="sheetFrame" src="আপনার_গুগল_শিট_লিঙ্ক" style="width:100%; height:600px;"></iframe>
+    <div id="bikroy-menu" class="menu-section">
+        <h3>কোম্পানির তালিকা:</h3>
+        <button class="btn btn-sub" onclick="openSheet()">কোম্পানি ১</button>
+        <button class="btn btn-sub" onclick="openSheet()">কোম্পানি ২</button>
+        <button class="btn btn-sub" onclick="openSheet()">কোম্পানি ৩</button>
+        <button class="btn btn-sub" onclick="openSheet()">কোম্পানি ৪</button>
+        <button class="btn btn-back" onclick="showMenu('home-menu')">← পেছনে যান</button>
+    </div>
+
+    <iframe id="sheetFrame" src=""></iframe>
 </div>
+
+<script>
+    var googleSheetURL = "আপনার_গুগল_শিট_লিঙ্ক";
+
+    function showMenu(menuId) {
+        // সব মেনু হাইড করা
+        var sections = document.getElementsByClassName('menu-section');
+        for(var i=0; i<sections.length; i++) sections[i].style.display = 'none';
+        // নির্দিষ্ট মেনু শো করা
+        document.getElementById(menuId).style.display = 'block';
+        document.getElementById('sheetFrame').style.display = 'none';
+    }
+
+    function openSheet() {
+        var frame = document.getElementById('sheetFrame');
+        frame.style.display = 'block';
+        frame.src = googleSheetURL + "&rm=minimal";
+    }
+</script>
+
+</body>
+</html>
