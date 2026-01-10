@@ -8,11 +8,13 @@
         * { box-sizing: border-box; }
         body, html { margin: 0; padding: 0; height: 100vh; background: #f4f6f9; font-family: 'Segoe UI', Arial, sans-serif; }
         
+        /* লগইন ডিজাইন */
         #login-area { position: fixed; inset: 0; background: white; z-index: 1000; display: flex; align-items: center; justify-content: center; }
         .box { width: 280px; padding: 30px; border: 1px solid #ddd; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         input.login-input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; text-align: center; font-size: 16px; outline: none; }
         .go-btn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
+        /* মেইন অ্যাপ */
         #main-app { display: none; flex-direction: column; height: 100vh; }
         .header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 18px; position: sticky; top: 0; z-index: 100; width: 100%; }
         .back-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #28a745; color: white; padding: 5px 12px; border-radius: 6px; border: none; cursor: pointer; display: none; }
@@ -27,12 +29,14 @@
         .stat-joma { color: #2e7d32; display: block; }
         .stat-jer { color: #c62828; display: block; }
 
+        /* সার্চ বক্স */
         #search-container { padding: 10px; background: #fff; border-bottom: 1px solid #eee; display: none; position: sticky; top: 52px; z-index: 90; }
         #globalSearch { width: 100%; padding: 12px; border: 2px solid #1a73e8; border-radius: 8px; font-size: 16px; outline: none; }
 
+        /* তালিকা */
         #list-screen { display: none; flex-grow: 1; overflow-y: auto; background: #fff; }
         .list-item { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .item-text { font-weight: bold; color: #333; }
+        .item-text { font-weight: bold; color: #333; font-family: 'Arial', sans-serif; }
         .view-link { color: #1a73e8; font-size: 13px; font-weight: bold; }
 
         #sheet-screen { display: none; flex-grow: 1; height: 100%; }
@@ -52,7 +56,7 @@
 
     <div id="main-app">
         <div class="header">
-            <button id="backIcon" class="back-btn" onclick="handleBack()">←</button>
+            <button id="backIcon" class="back-btn" onclick="handleBack()">← ফিরে যান</button>
             <span id="topTitle">মেসার্স সাগর ফিস</span>
         </div>
 
@@ -74,7 +78,7 @@
         </div>
 
         <div id="search-container">
-            <input type="text" id="globalSearch" placeholder="খুঁজুন..." onkeyup="filterItems()">
+            <input type="text" id="globalSearch" placeholder="তারিখ দিয়ে খুঁজুন (উদা: 10/1/2026)..." onkeyup="filterItems()">
         </div>
 
         <div id="list-screen"></div>
@@ -102,8 +106,8 @@
         document.getElementById('search-container').style.display = 'block';
         document.getElementById('list-screen').style.display = 'block';
         document.getElementById('backIcon').style.display = 'block';
-        document.getElementById('topTitle').innerText = type + " - বছর নির্বাচন করুন";
-        document.getElementById('globalSearch').placeholder = "বছর খুঁজুন (২০২৬-২০৩৫)...";
+        document.getElementById('topTitle').innerText = type + " - বছর বেছে নিন";
+        document.getElementById('globalSearch').placeholder = "বছর খুঁজুন (2026-2035)...";
 
         const container = document.getElementById('list-screen');
         container.innerHTML = "";
@@ -111,7 +115,7 @@
         for (let year = 2026; year <= 2035; year++) {
             let div = document.createElement('div');
             div.className = 'list-item';
-            div.innerHTML = `<span class="item-text">বছর: ${year}</span><span class="view-link">নির্বাচন করুন ❯</span>`;
+            div.innerHTML = `<span class="item-text">বছর: ${year}</span><span class="view-link">বাছাই করুন ❯</span>`;
             div.onclick = function() { showDateList(year); };
             container.appendChild(div);
         }
@@ -120,7 +124,7 @@
     function showDateList(year) {
         currentYear = year;
         document.getElementById('topTitle').innerText = currentType + " - " + year;
-        document.getElementById('globalSearch').placeholder = "তারিখ খুঁজুন (যেমন: ৫ জানুয়ারি)...";
+        document.getElementById('globalSearch').placeholder = "তারিখ দিয়ে খুঁজুন (উদা: 10/1/2026)...";
         document.getElementById('globalSearch').value = "";
 
         const container = document.getElementById('list-screen');
@@ -128,7 +132,12 @@
         
         let date = new Date(year, 0, 1);
         while (date.getFullYear() === year) {
-            let dString = date.toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' });
+            // তারিখ ইংরেজি ফরম্যাটে (D/M/YYYY) তৈরি করা হচ্ছে
+            let d = date.getDate();
+            let m = date.getMonth() + 1;
+            let y = date.getFullYear();
+            let dString = `${d}/${m}/${y}`;
+            
             let div = document.createElement('div');
             div.className = 'list-item';
             div.innerHTML = `<span class="item-text">${dString}</span><span class="view-link">দেখুন ❯</span>`;
@@ -160,8 +169,7 @@
             document.getElementById('sheet-screen').style.display = 'none';
             document.getElementById('search-container').style.display = 'block';
             document.getElementById('list-screen').style.display = 'block';
-            document.getElementById('topTitle').innerText = currentType + " - " + currentYear;
-        } else if (document.getElementById('list-screen').style.display === 'block' && document.getElementById('topTitle').innerText.includes("বছর নির্বাচন করুন")) {
+        } else if (document.getElementById('list-screen').style.display === 'block' && document.getElementById('topTitle').innerText.includes("বছর বেছে নিন")) {
             document.getElementById('list-screen').style.display = 'none';
             document.getElementById('search-container').style.display = 'none';
             document.getElementById('home-screen').style.display = 'flex';
