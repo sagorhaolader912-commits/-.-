@@ -11,10 +11,10 @@
         #login-area { position: fixed; inset: 0; background: white; z-index: 1000; display: flex; align-items: center; justify-content: center; }
         .box { width: 85%; max-width: 300px; padding: 25px; border: 1px solid #ddd; border-radius: 15px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         
-        /* পাসওয়ার্ড এখন ডট ডট দেখাবে */
+        /* ডট ডট ইনপুট ডিজাইন */
         .login-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; text-align: center; font-size: 16px; display: block; outline: none; }
         
-        .show-pass-label { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; font-size: 14px; color: #555; cursor: pointer; }
+        .show-pass-label { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; font-size: 14px; color: #555; cursor: pointer; user-select: none; }
         .go-btn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; }
 
         #main-app { display: none; flex-direction: column; height: 100vh; }
@@ -43,13 +43,13 @@
         <div class="box">
             <h2 style="color:#1a73e8; margin-bottom:20px;">সাগর ফিস</h2>
             
-            <input type="password" id="uPass" class="login-input" placeholder="পাসওয়ার্ড লিখুন">
+            <input type="password" id="uPass" class="login-input" placeholder="পাসওয়ার্ড">
+            
+            <input type="password" id="uCode" class="login-input" placeholder="কোড">
             
             <label class="show-pass-label">
-                <input type="checkbox" onclick="toggleView()"> Show Password
+                <input type="checkbox" id="checkT" onclick="toggleView()"> Show Password & Code
             </label>
-
-            <input type="number" id="uCode" class="login-input" placeholder="কোড লিখুন">
             
             <button class="go-btn" onclick="loginCheck()">লগইন</button>
         </div>
@@ -76,21 +76,25 @@
     </div>
 
 <script>
-    // আপনার সঠিক পাসওয়ার্ড ও কোড
-    const MY_P = "sagarfish";
-    const MY_C = "4321";
-    const MY_S = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/preview?rm=minimal";
+    // আপনার সঠিক তথ্য
+    const PASS = "sagarfish";
+    const CODE = "4321";
+    const URL = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/preview?rm=minimal";
 
+    // পাসওয়ার্ড এবং কোড একসাথে দেখানোর বা লুকানোর ফাংশন
     function toggleView() {
-        let x = document.getElementById("uPass");
-        x.type = (x.type === "password") ? "text" : "password";
+        let p = document.getElementById("uPass");
+        let c = document.getElementById("uCode");
+        let type = (p.type === "password") ? "text" : "password";
+        p.type = type;
+        c.type = type;
     }
 
     function loginCheck() {
-        let p = document.getElementById('uPass').value.trim().toLowerCase();
-        let c = document.getElementById('uCode').value.trim();
+        let pVal = document.getElementById('uPass').value.trim().toLowerCase();
+        let cVal = document.getElementById('uCode').value.trim();
 
-        if (p === MY_P && c === MY_C) {
+        if (pVal === PASS && cVal === CODE) {
             document.getElementById('login-area').style.display = 'none';
             document.getElementById('main-app').style.display = 'flex';
         } else {
@@ -132,7 +136,7 @@
                 document.getElementById('list-screen').style.display = 'none';
                 document.getElementById('sheet-screen').style.display = 'block';
                 document.getElementById('topTitle').innerText = dStr;
-                document.getElementById('sheetFrame').src = MY_S;
+                document.getElementById('sheetFrame').src = URL;
             };
             container.appendChild(div);
             date.setDate(date.getDate() + 1);
