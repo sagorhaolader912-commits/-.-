@@ -8,13 +8,11 @@
         * { box-sizing: border-box; }
         body, html { margin: 0; padding: 0; height: 100vh; background: #f4f6f9; font-family: 'Segoe UI', Arial, sans-serif; }
         
-        /* লগইন ডিজাইন */
         #login-area { position: fixed; inset: 0; background: white; z-index: 1000; display: flex; align-items: center; justify-content: center; }
         .box { width: 280px; padding: 30px; border: 1px solid #ddd; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         input.login-input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; text-align: center; font-size: 16px; outline: none; }
         .go-btn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* মেইন অ্যাপ */
         #main-app { display: none; flex-direction: column; height: 100vh; }
         .header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 18px; position: sticky; top: 0; z-index: 100; width: 100%; }
         .back-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #28a745; color: white; padding: 5px 12px; border-radius: 6px; border: none; cursor: pointer; display: none; }
@@ -25,18 +23,12 @@
         .btn-green { background: #28a745; }
         .btn-pink { background: #e91e63; }
 
-        .stats { font-size: 14px; font-weight: 600; line-height: 1.8; }
-        .stat-joma { color: #2e7d32; display: block; }
-        .stat-jer { color: #c62828; display: block; }
-
-        /* সার্চ বক্স */
         #search-container { padding: 10px; background: #fff; border-bottom: 1px solid #eee; display: none; position: sticky; top: 52px; z-index: 90; }
-        #globalSearch { width: 100%; padding: 12px; border: 2px solid #1a73e8; border-radius: 8px; font-size: 16px; outline: none; }
+        #globalSearch { width: 100%; padding: 12px; border: 2px solid #1a73e8; border-radius: 8px; font-size: 16px; outline: none; font-family: Arial; }
 
-        /* তালিকা */
         #list-screen { display: none; flex-grow: 1; overflow-y: auto; background: #fff; }
         .list-item { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .item-text { font-weight: bold; color: #333; font-family: 'Arial', sans-serif; }
+        .item-text { font-weight: bold; color: #333; font-family: Arial, sans-serif; font-size: 17px; }
         .view-link { color: #1a73e8; font-size: 13px; font-weight: bold; }
 
         #sheet-screen { display: none; flex-grow: 1; height: 100%; }
@@ -48,8 +40,8 @@
     <div id="login-area">
         <div class="box">
             <div class="title" style="color:#1a73e8; font-weight:bold; margin-bottom:20px; font-size:20px;">মেসার্স সাগর ফিস</div>
-            <input type="password" id="pass" class="login-input" placeholder="পাসওয়ার্ড">
-            <input type="number" id="code" class="login-input" placeholder="কোড">
+            <input type="password" id="pass" class="login-input" placeholder="পাসওয়ার্ড (sagar)">
+            <input type="number" id="code" class="login-input" placeholder="কোড (998877)">
             <button class="go-btn" onclick="checkNow()">লগইন</button>
         </div>
     </div>
@@ -63,22 +55,14 @@
         <div id="home-screen" class="menu-list">
             <div class="card">
                 <button class="btn btn-green" onclick="showYearList('আড়ৎ')">আড়ৎ এর হিসাব</button>
-                <div class="stats">
-                    <span class="stat-joma">মোট জমা: ৳ 0.0</span>
-                    <span class="stat-jer">মোট জের: ৳ 0.0</span>
-                </div>
             </div>
             <div class="card">
                 <button class="btn btn-pink" onclick="showYearList('বিক্রয়')">বিক্রয়ের হিসাব</button>
-                <div class="stats">
-                    <span class="stat-joma">মোট জমা: ৳ 0.0</span>
-                    <span class="stat-jer">মোট জের: ৳ 0.0</span>
-                </div>
             </div>
         </div>
 
         <div id="search-container">
-            <input type="text" id="globalSearch" placeholder="তারিখ দিয়ে খুঁজুন (উদা: 10/1/2026)..." onkeyup="filterItems()">
+            <input type="text" id="globalSearch" placeholder="তারিখ লিখুন (উদা: 10/1/2026)..." onkeyup="filterItems()">
         </div>
 
         <div id="list-screen"></div>
@@ -97,7 +81,7 @@
         if (document.getElementById('pass').value === P && document.getElementById('code').value === C) {
             document.getElementById('login-area').style.display = 'none';
             document.getElementById('main-app').style.display = 'flex';
-        } else { alert("ভুল পাসওয়ার্ড বা কোড!"); }
+        } else { alert("ভুল তথ্য!"); }
     }
 
     function showYearList(type) {
@@ -107,7 +91,7 @@
         document.getElementById('list-screen').style.display = 'block';
         document.getElementById('backIcon').style.display = 'block';
         document.getElementById('topTitle').innerText = type + " - বছর বেছে নিন";
-        document.getElementById('globalSearch').placeholder = "বছর খুঁজুন (2026-2035)...";
+        document.getElementById('globalSearch').placeholder = "বছর লিখুন (2026-2035)...";
 
         const container = document.getElementById('list-screen');
         container.innerHTML = "";
@@ -115,7 +99,7 @@
         for (let year = 2026; year <= 2035; year++) {
             let div = document.createElement('div');
             div.className = 'list-item';
-            div.innerHTML = `<span class="item-text">বছর: ${year}</span><span class="view-link">বাছাই করুন ❯</span>`;
+            div.innerHTML = `<span class="item-text">Year: ${year}</span><span class="view-link">বাছাই করুন ❯</span>`;
             div.onclick = function() { showDateList(year); };
             container.appendChild(div);
         }
@@ -124,7 +108,7 @@
     function showDateList(year) {
         currentYear = year;
         document.getElementById('topTitle').innerText = currentType + " - " + year;
-        document.getElementById('globalSearch').placeholder = "তারিখ দিয়ে খুঁজুন (উদা: 10/1/2026)...";
+        document.getElementById('globalSearch').placeholder = "তারিখ লিখুন (উদা: 10/1/2026)...";
         document.getElementById('globalSearch').value = "";
 
         const container = document.getElementById('list-screen');
@@ -132,11 +116,11 @@
         
         let date = new Date(year, 0, 1);
         while (date.getFullYear() === year) {
-            // তারিখ ইংরেজি ফরম্যাটে (D/M/YYYY) তৈরি করা হচ্ছে
+            // ম্যানুয়ালি ইংরেজি সংখ্যায় তারিখ তৈরি
             let d = date.getDate();
             let m = date.getMonth() + 1;
             let y = date.getFullYear();
-            let dString = `${d}/${m}/${y}`;
+            let dString = d + "/" + m + "/" + y;
             
             let div = document.createElement('div');
             div.className = 'list-item';
