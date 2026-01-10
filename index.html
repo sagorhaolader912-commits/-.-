@@ -5,50 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>মেসার্স সাগর ফিস</title>
     <style>
-        * { box-sizing: border-box; }
-        
-        /* এই লাইনটি পেজ টেনে কেটে যাওয়া বা রিফ্রেশ হওয়া বন্ধ করবে */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { 
-            margin: 0; 
-            padding: 0; 
-            height: 100vh; 
-            background: #f4f6f9; 
-            font-family: 'Segoe UI', Arial, sans-serif;
-            overscroll-behavior: none; 
-            overflow: hidden; 
+            margin: 0; padding: 0; height: 100vh; background: #f4f6f9; 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            overflow-x: hidden; /* ডানে বামে নড়াচড়া বন্ধ */
         }
         
-        /* লগইন ডিজাইন */
+        /* লগইন এরিয়া */
         #login-area { position: fixed; inset: 0; background: white; z-index: 1000; display: flex; align-items: center; justify-content: center; }
-        .box { width: 280px; padding: 30px; border: 1px solid #ddd; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .box { width: 90%; max-width: 300px; padding: 30px; border: 1px solid #ddd; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         input.login-input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; text-align: center; font-size: 16px; outline: none; }
-        .go-btn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .go-btn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
 
-        /* হেডার */
+        /* মেইন অ্যাপ */
         #main-app { display: none; flex-direction: column; height: 100vh; }
-        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 18px; position: sticky; top: 0; z-index: 100; width: 100%; }
-        .back-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #28a745; color: white; padding: 5px 12px; border-radius: 6px; border: none; cursor: pointer; display: none; }
+        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 18px; position: sticky; top: 0; z-index: 100; }
+        .back-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; border: none; font-size: 14px; display: none; }
         
-        /* মেনু লিস্ট স্ক্রল হবে অ্যাপের ভেতরে */
-        .menu-list, #list-screen { 
-            display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px; 
-            flex-grow: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; 
-        }
-
-        .card { background: white; width: 100%; max-width: 380px; padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 12px; color: white; font-weight: bold; font-size: 18px; margin-bottom: 12px; cursor: pointer; }
+        .menu-list { padding: 20px; display: flex; flex-direction: column; gap: 20px; align-items: center; overflow-y: auto; }
+        .card { background: white; width: 100%; max-width: 350px; padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .btn { width: 100%; padding: 18px; border: none; border-radius: 12px; color: white; font-weight: bold; font-size: 18px; cursor: pointer; }
         .btn-green { background: #28a745; }
         .btn-pink { background: #e91e63; }
 
-        #search-container { padding: 10px; background: #fff; border-bottom: 1px solid #eee; display: none; position: sticky; top: 52px; z-index: 90; }
-        #globalSearch { width: 100%; padding: 12px; border: 2px solid #1a73e8; border-radius: 8px; font-size: 16px; outline: none; font-family: Arial; }
+        /* সার্চ ও লিস্ট */
+        #search-container { padding: 10px; background: #fff; border-bottom: 1px solid #eee; display: none; }
+        #globalSearch { width: 100%; padding: 12px; border: 2px solid #1a73e8; border-radius: 8px; font-size: 16px; outline: none; }
+        
+        #list-screen { display: none; overflow-y: auto; background: #fff; flex-grow: 1; }
+        .list-item { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .item-text { font-weight: bold; color: #333; font-family: Arial; font-size: 16px; }
 
-        #list-screen { display: none; background: #fff; padding: 0; }
-        .list-item { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; cursor: pointer; width: 100%; }
-        .item-text { font-weight: bold; color: #333; font-family: Arial; font-size: 17px; }
-        .view-link { color: #1a73e8; font-size: 13px; font-weight: bold; }
-
-        #sheet-screen { display: none; flex-grow: 1; height: 100%; }
+        /* শিট ভিউ */
+        #sheet-screen { display: none; flex-grow: 1; -webkit-overflow-scrolling: touch; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
@@ -56,16 +46,16 @@
 
     <div id="login-area">
         <div class="box">
-            <div class="title" style="color:#1a73e8; font-weight:bold; margin-bottom:20px; font-size:20px;">মেসার্স সাগর ফিস</div>
+            <h2 style="color:#1a73e8; margin-bottom:20px;">সাগর ফিস</h2>
             <input type="text" id="pass" class="login-input" placeholder="পাসওয়ার্ড (sagar)">
             <input type="number" id="code" class="login-input" placeholder="কোড (998877)">
-            <button class="go-btn" onclick="checkNow()">লগইন করুন</button>
+            <button class="go-btn" onclick="checkNow()">লগইন</button>
         </div>
     </div>
 
     <div id="main-app">
         <div class="header">
-            <button id="backIcon" class="back-btn" onclick="handleBack()">← ফিরে যান</button>
+            <button id="backIcon" class="back-btn" onclick="handleBack()">← back</button>
             <span id="topTitle">মেসার্স সাগর ফিস</span>
         </div>
 
@@ -79,7 +69,7 @@
         </div>
 
         <div id="search-container">
-            <input type="text" id="globalSearch" placeholder="খুঁজুন (উদা: 10/1/2026)..." onkeyup="filterItems()">
+            <input type="text" id="globalSearch" placeholder="তারিখ লিখুন (উদা: 10/1/2026)" onkeyup="filterItems()">
         </div>
 
         <div id="list-screen"></div>
@@ -90,92 +80,74 @@
     </div>
 
 <script>
-    const passKey = "sagar"; 
-    const codeKey = "998877";
-    const mySheet = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/preview?rm=minimal";
-    
-    let currentType = "";
-    let currentYear = "";
+    const P = "sagar", C = "998877";
+    const sheetURL = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/preview?rm=minimal";
 
     function checkNow() {
         let uPass = document.getElementById('pass').value.toLowerCase();
         let uCode = document.getElementById('code').value;
-        if (uPass === passKey && uCode === codeKey) {
+        if (uPass === P && uCode === C) {
             document.getElementById('login-area').style.display = 'none';
             document.getElementById('main-app').style.display = 'flex';
-        } else { alert("ভুল তথ্য!"); }
+        } else { alert("ভুল পাসওয়ার্ড বা কোড!"); }
     }
 
     function showYearList(type) {
-        currentType = type;
+        window.currentType = type;
         document.getElementById('home-screen').style.display = 'none';
         document.getElementById('search-container').style.display = 'block';
-        document.getElementById('list-screen').style.display = 'flex';
+        document.getElementById('list-screen').style.display = 'block';
         document.getElementById('backIcon').style.display = 'block';
-        document.getElementById('topTitle').innerText = type + " - বছর বেছে নিন";
+        document.getElementById('topTitle').innerText = type + " - বছর";
 
-        const container = document.getElementById('list-screen');
+        let container = document.getElementById('list-screen');
         container.innerHTML = "";
         for (let year = 2026; year <= 2035; year++) {
             let div = document.createElement('div');
             div.className = 'list-item';
-            div.innerHTML = `<span class="item-text">Year: ${year}</span><span class="view-link">বাছাই করুন ❯</span>`;
-            div.onclick = function() { showDateList(year); };
+            div.innerHTML = `<span class="item-text">Year: ${year}</span><span style="color:#1a73e8">❯</span>`;
+            div.onclick = () => showDateList(year);
             container.appendChild(div);
         }
     }
 
     function showDateList(year) {
-        currentYear = year;
-        document.getElementById('topTitle').innerText = currentType + " - " + year;
-        document.getElementById('globalSearch').value = "";
-        const container = document.getElementById('list-screen');
+        window.currentYear = year;
+        document.getElementById('topTitle').innerText = window.currentType + " - " + year;
+        let container = document.getElementById('list-screen');
         container.innerHTML = "";
-        
         let date = new Date(year, 0, 1);
         while (date.getFullYear() === year) {
-            let dString = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+            let dStr = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
             let div = document.createElement('div');
             div.className = 'list-item';
-            div.innerHTML = `<span class="item-text">${dString}</span><span class="view-link">দেখুন ❯</span>`;
-            div.onclick = function() { openSheet(currentType + " - " + dString); };
+            div.innerHTML = `<span class="item-text">${dStr}</span><span style="color:#1a73e8">❯</span>`;
+            div.onclick = () => openSheet(dStr);
             container.appendChild(div);
             date.setDate(date.getDate() + 1);
         }
     }
 
-    function filterItems() {
-        let input = document.getElementById('globalSearch').value.toLowerCase();
-        let items = document.getElementsByClassName('list-item');
-        for (let i = 0; i < items.length; i++) {
-            let text = items[i].getElementsByClassName('item-text')[0].innerText.toLowerCase();
-            items[i].style.display = text.includes(input) ? "flex" : "none";
-        }
-    }
-
-    function openSheet(title) {
+    function openSheet(dateTitle) {
         document.getElementById('search-container').style.display = 'none';
         document.getElementById('list-screen').style.display = 'none';
         document.getElementById('sheet-screen').style.display = 'block';
-        document.getElementById('topTitle').innerText = title;
-        document.getElementById('sheetFrame').src = mySheet + "&cache=" + new Date().getTime();
+        document.getElementById('topTitle').innerText = dateTitle;
+        document.getElementById('sheetFrame').src = sheetURL;
+    }
+
+    function filterItems() {
+        let input = document.getElementById('globalSearch').value.toLowerCase();
+        let items = document.getElementsByClassName('list-item');
+        for (let item of items) {
+            let text = item.innerText.toLowerCase();
+            item.style.display = text.includes(input) ? "flex" : "none";
+        }
     }
 
     function handleBack() {
         if (document.getElementById('sheet-screen').style.display === 'block') {
             document.getElementById('sheet-screen').style.display = 'none';
             document.getElementById('search-container').style.display = 'block';
-            document.getElementById('list-screen').style.display = 'flex';
-        } else if (document.getElementById('list-screen').style.display === 'flex' && document.getElementById('topTitle').innerText.includes("বছর বেছে নিন")) {
-            document.getElementById('list-screen').style.display = 'none';
-            document.getElementById('search-container').style.display = 'none';
-            document.getElementById('home-screen').style.display = 'flex';
-            document.getElementById('backIcon').style.display = 'none';
-            document.getElementById('topTitle').innerText = "মেসার্স সাগর ফিস";
-        } else {
-            showYearList(currentType);
-        }
-    }
-</script>
-</body>
-</html>
+            document.getElementById('list-screen').style.display = 'block';
+        } else if (document.getElementById
