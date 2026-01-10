@@ -10,19 +10,24 @@
         .header { background: #1a73e8; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 20px; font-weight: bold; }
         
         .btn-main { padding: 18px; width: 95%; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; margin: 8px auto; color: white; background: #28a745; font-size: 16px; display: block; }
-        .btn-list { display: flex; flex-direction: column; gap: 8px; max-height: 450px; overflow-y: auto; padding: 5px; }
+        .btn-list { display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto; padding: 5px; }
         .item-row { background: #ffffff; border-radius: 10px; border: 1px solid #dfe1e5; margin-bottom: 5px; cursor: pointer; padding: 15px; text-align: left; font-weight: 600; color: #333; }
-        .item-row:hover { background: #f1f3f4; }
 
-        /* Tali Khata Frame */
+        /* Summary Equation Boxes */
+        .summary-container { display: flex; gap: 10px; margin: 15px 0; justify-content: center; }
+        .summary-box { flex: 1; padding: 15px; border-radius: 12px; color: white; font-weight: bold; }
+        .joma-box { background: #28a745; border: 2px solid #1e7e34; }
+        .jer-box { background: #dc3545; border: 2px solid #bd2130; }
+        .summary-val { font-size: 22px; display: block; margin-top: 5px; }
+
         .tali-table-container { margin-top: 10px; border: 2px solid #1a73e8; border-radius: 10px; overflow: hidden; background: #fff; }
         .tali-header { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; background: #1a73e8; color: white; font-size: 10px; font-weight: bold; padding: 12px 2px; }
         
-        iframe { width: 100%; height: 600px; border: none; background: #fff; }
-        .back-btn { background: #6c757d !important; margin-top: 10px; width: 95%; }
+        iframe { width: 100%; height: 500px; border: none; background: #fff; }
+        .back-btn { background: #6c757d !important; width: 95%; margin: 10px auto; }
         
         #step2, #app-content, #sub-menu, #tali-khata-page { display: none; }
-        input { width: 85%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; text-align: center; font-size: 16px; }
+        input { width: 85%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; text-align: center; }
     </style>
 </head>
 <body>
@@ -33,7 +38,6 @@
         <input type="password" id="passInput" placeholder="পাসওয়ার্ড দিন">
         <button class="btn-main" onclick="checkPassword()">পরবর্তী</button>
     </div>
-    
     <div id="step2">
         <div class="header">নিরাপত্তা কোড</div>
         <input type="number" id="twoFactorInput" placeholder="৬ ডিজিট কোড">
@@ -45,7 +49,6 @@
             <div class="header">প্রধান মেনু</div>
             <button class="btn-main" onclick="showMenu('Arat')">আড়ৎ এর হিসাব</button>
             <button class="btn-main" style="background:#e91e63" onclick="showMenu('Company')">বিক্রয়ের হিসাব</button>
-            <button class="btn-main" style="background:#6c757d" onclick="location.reload()">লগ আউট</button>
         </div>
 
         <div id="sub-menu">
@@ -55,7 +58,19 @@
         </div>
 
         <div id="tali-khata-page">
-            <div class="header" id="tali-title" style="padding: 10px; font-size: 18px;">খাতা</div>
+            <div class="header" id="tali-title" style="padding: 10px; margin-bottom: 5px;">খাতা</div>
+            
+            <div class="summary-container">
+                <div class="summary-box joma-box">
+                    মোট জমা (আজ)
+                    <span id="totalJoma" class="summary-val">০.০০</span>
+                </div>
+                <div class="summary-box jer-box">
+                    মোট জের (বাকি)
+                    <span id="totalJer" class="summary-val">০.০০</span>
+                </div>
+            </div>
+
             <div class="tali-table-container">
                 <div class="tali-header">
                     <div>তারিখ</div><div>ওজন</div><div>দর</div><div>মোট</div><div>জমা</div><div>জের</div>
@@ -70,21 +85,20 @@
 <script>
     const MAIN_PASSWORD = "sagar"; 
     const TWO_FACTOR_CODE = "998877"; 
-    // এডিট মোড লিঙ্ক
     const MY_SHEET_URL = "https://docs.google.com/spreadsheets/d/10VFHqozMCUa6GlVzraUAloLex-NAHijfwfBl4rBHFSY/edit?rm=minimal";
 
     function checkPassword() {
         if(document.getElementById('passInput').value === MAIN_PASSWORD) {
             document.getElementById('step1').style.display = 'none';
             document.getElementById('step2').style.display = 'block';
-        } else { alert("ভুল পাসওয়ার্ড!"); }
+        }
     }
 
     function verifyCode() {
         if(document.getElementById('twoFactorInput').value === TWO_FACTOR_CODE) {
             document.getElementById('step2').style.display = 'none';
             document.getElementById('app-content').style.display = 'block';
-        } else { alert("ভুল কোড!"); }
+        }
     }
 
     const savedNames = {
@@ -95,7 +109,6 @@
     function showMenu(type) {
         document.getElementById('home-menu').style.display = 'none';
         document.getElementById('sub-menu').style.display = 'block';
-        
         const container = document.getElementById('dynamic-buttons');
         container.innerHTML = "";
         savedNames[type].forEach((name) => {
@@ -112,6 +125,11 @@
         document.getElementById('tali-khata-page').style.display = 'block';
         document.getElementById('tali-title').innerText = name;
         document.getElementById('sheetFrame').src = MY_SHEET_URL;
+        
+        // এখানে আপনি ম্যানুয়ালি আজকের হিসাব লিখে রাখতে পারেন অথবা সূত্র দিয়ে কানেক্ট করা যায়।
+        // বর্তমানে এটি ডেমো হিসেবে ০ দেখাচ্ছে।
+        document.getElementById('totalJoma').innerText = "৳ ০.০০";
+        document.getElementById('totalJer').innerText = "৳ ০.০০";
     }
 
     function closeTali() {
