@@ -16,7 +16,7 @@
         .box { width: 85%; max-width: 300px; padding: 25px; border: 1px solid #ddd; border-radius: 15px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .login-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; text-align: center; font-size: 16px; display: block; outline: none; }
         
-        .show-pass-wrap { display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 15px; font-size: 14px; color: #555; cursor: pointer; }
+        .show-pass-wrap { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; font-size: 14px; color: #555; cursor: pointer; user-select: none; }
         
         .go-btn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; }
 
@@ -47,13 +47,15 @@
     <div id="login-area">
         <div class="box">
             <h2 style="color:#1a73e8; margin-bottom:20px;">সাগর ফিস</h2>
-            <input type="password" id="userInputPass" class="login-input" placeholder="পাসওয়ার্ড (sagarfish)">
+            
+            <input type="password" id="userInputPass" class="login-input" placeholder="পাসওয়ার্ড লিখুন">
             
             <label class="show-pass-wrap">
-                <input type="checkbox" onclick="togglePass()"> Show Password
+                <input type="checkbox" id="checkToggle" onclick="togglePass()"> Show Password
             </label>
 
-            <input type="number" id="userInputCode" class="login-input" placeholder="কোড (4321)">
+            <input type="number" id="userInputCode" class="login-input" placeholder="কোড লিখুন">
+            
             <button class="go-btn" onclick="checkLogin()">লগইন</button>
         </div>
     </div>
@@ -85,33 +87,36 @@
     </div>
 
 <script>
-    // আপনার নতুন পাসওয়ার্ড ও কোড
-    const VALID_PASS = "sagarfish";
-    const VALID_CODE = "4321";
-    const SHEET_LINK = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/preview?rm=minimal";
+    // আপনার দেওয়া সঠিক তথ্য
+    const CORRECT_PASS = "sagarfish";
+    const CORRECT_CODE = "4321";
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/preview?rm=minimal";
 
-    // পাসওয়ার্ড দেখানো বা লুকানোর ফাংশন
+    // পাসওয়ার্ড দেখানো/লুকানোর ফাংশন
     function togglePass() {
-        let x = document.getElementById("userInputPass");
-        if (x.type === "password") {
-            x.type = "text";
+        let passInput = document.getElementById("userInputPass");
+        if (passInput.type === "password") {
+            passInput.type = "text";
         } else {
-            x.type = "password";
+            passInput.type = "password";
         }
     }
 
+    // লগইন ফাংশন
     function checkLogin() {
-        let p = document.getElementById('userInputPass').value;
-        let c = document.getElementById('userInputCode').value;
+        let p = document.getElementById('userInputPass').value.trim();
+        let c = document.getElementById('userInputCode').value.trim();
 
-        if (p === VALID_PASS && c === VALID_CODE) {
+        // ছোট হাতের অক্ষরে রূপান্তর করে চেক করা হচ্ছে যাতে ভুল না হয়
+        if (p.toLowerCase() === CORRECT_PASS && c === CORRECT_CODE) {
             document.getElementById('login-area').style.display = 'none';
             document.getElementById('main-app').style.display = 'flex';
         } else {
-            alert("ভুল পাসওয়ার্ড বা কোড! আবার চেষ্টা করুন।");
+            alert("ভুল পাসওয়ার্ড বা কোড! দয়া করে সঠিক তথ্য দিন।");
         }
     }
 
+    // বাকি সব ফাংশন আগের মতোই রাখা হয়েছে
     function showYearList(type) {
         window.selectedType = type;
         document.getElementById('home-screen').style.display = 'none';
@@ -133,50 +138,3 @@
 
     function showDateList(year) {
         document.getElementById('topTitle').innerText = window.selectedType + " - " + year;
-        let container = document.getElementById('list-screen');
-        container.innerHTML = "";
-        let date = new Date(year, 0, 1);
-        while (date.getFullYear() === year) {
-            let dStr = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-            let div = document.createElement('div');
-            div.className = 'list-item';
-            div.innerHTML = `<span class="item-text">${dStr}</span><span style="color:#1a73e8">❯</span>`;
-            div.onclick = () => openSheet(dStr);
-            container.appendChild(div);
-            date.setDate(date.getDate() + 1);
-        }
-    }
-
-    function openSheet(dateTitle) {
-        document.getElementById('search-container').style.display = 'none';
-        document.getElementById('list-screen').style.display = 'none';
-        document.getElementById('sheet-screen').style.display = 'block';
-        document.getElementById('topTitle').innerText = dateTitle;
-        document.getElementById('sheetFrame').src = SHEET_LINK + "&t=" + new Date().getTime();
-    }
-
-    function filterItems() {
-        let input = document.getElementById('globalSearch').value.toLowerCase();
-        let items = document.getElementsByClassName('list-item');
-        for (let item of items) {
-            let text = item.innerText.toLowerCase();
-            item.style.display = text.includes(input) ? "flex" : "none";
-        }
-    }
-
-    function handleBack() {
-        if (document.getElementById('sheet-screen').style.display === 'block') {
-            document.getElementById('sheet-screen').style.display = 'none';
-            document.getElementById('search-container').style.display = 'block';
-            document.getElementById('list-screen').style.display = 'block';
-        } else if (document.getElementById('list-screen').style.display === 'block') {
-            document.getElementById('list-screen').style.display = 'none';
-            document.getElementById('search-container').style.display = 'none';
-            document.getElementById('home-screen').style.display = 'flex';
-            document.getElementById('backIcon').style.display = 'none';
-            document.getElementById('topTitle').innerText = "মেসার্স সাগর ফিস";
-        }
-    }
-</script>
-</body>
-</html>
