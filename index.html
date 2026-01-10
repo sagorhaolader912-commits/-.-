@@ -6,66 +6,68 @@
     <title>মেসার্স সাগর ফিস</title>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; text-align: center; background-color: #f0f2f5; margin: 0; padding: 10px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); min-height: 95vh; }
-        .header { background: #1a73e8; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); min-height: 90vh; margin-top: 20px; }
+        .header { background: #1a73e8; color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; font-size: 24px; font-weight: bold; }
         
-        .btn-main { padding: 18px; width: 95%; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; margin: 8px; color: white; background: #28a745; font-size: 16px; display: block; margin-left: auto; margin-right: auto; }
-        .search-box { width: 90%; padding: 12px; margin-bottom: 15px; border: 2px solid #1a73e8; border-radius: 10px; outline: none; }
-        
-        .btn-list { display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto; padding: 5px; }
-        .item-row { display: flex; align-items: center; background: #ffffff; border-radius: 10px; border: 1px solid #dfe1e5; margin-bottom: 5px; cursor: pointer; }
-        .item-name { flex-grow: 1; padding: 15px; font-weight: 600; text-align: left; font-size: 15px; color: #333; }
-        
-        .tali-table-container { margin-top: 10px; border: 2px solid #1a73e8; border-radius: 10px; overflow: hidden; background: #fff; }
-        .tali-header { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; background: #1a73e8; color: white; font-size: 10px; font-weight: bold; padding: 12px 2px; }
-        
-        iframe { width: 100%; height: 550px; border: none; background: #fff; }
-        .back-btn { background: #6c757d !important; margin-top: 10px; width: 95%; }
-        
-        /* Default Hidden */
+        .btn-main { padding: 18px; width: 100%; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; margin-bottom: 10px; color: white; background: #28a745; font-size: 18px; transition: 0.3s; }
+        .btn-main:hover { opacity: 0.9; }
+        .back-btn { background: #6c757d !important; margin-top: 15px; }
+
+        input { width: 90%; padding: 15px; margin: 15px 0; border: 2px solid #ddd; border-radius: 10px; text-align: center; font-size: 18px; outline: none; }
+        input:focus { border-color: #1a73e8; }
+
+        .btn-list { display: flex; flex-direction: column; gap: 10px; max-height: 450px; overflow-y: auto; padding: 5px; }
+        .item-row { display: flex; align-items: center; background: #f8f9fa; border-radius: 10px; border: 1px solid #ddd; cursor: pointer; transition: 0.2s; }
+        .item-row:hover { background: #eef2f7; }
+        .item-name { flex-grow: 1; padding: 18px; font-weight: 600; text-align: left; font-size: 16px; color: #333; }
+
+        /* Tali Khata Table */
+        .tali-table-container { margin-top: 10px; border: 2px solid #1a73e8; border-radius: 10px; overflow: hidden; }
+        .tali-header { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; background: #1a73e8; color: white; font-size: 11px; font-weight: bold; padding: 12px 2px; }
+        iframe { width: 100%; height: 600px; border: none; background: white; }
+
+        /* Sections Visibility */
         #step2, #app-content, #sub-menu, #tali-khata-page { display: none; }
-        input { width: 85%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="step1">
-        <div class="header"><h3>মেসার্স সাগর ফিস</h3></div>
+        <div class="header">মেসার্স সাগর ফিস</div>
         <input type="password" id="passInput" placeholder="পাসওয়ার্ড দিন">
-        <button class="btn-main" onclick="checkPassword()">পরবর্তী</button>
+        <button class="btn-main" onclick="checkPassword()">পরবর্তী ধাপ</button>
     </div>
     
     <div id="step2">
-        <div class="header"><h3>সিকিউরিটি কোড</h3></div>
-        <input type="number" id="twoFactorInput" placeholder="৬ ডিজিট কোড">
-        <button class="btn-main" onclick="verifyCode()">লগইন</button>
+        <div class="header">সিকিউরিটি যাচাই</div>
+        <input type="number" id="twoFactorInput" placeholder="কোড দিন">
+        <button class="btn-main" onclick="verifyCode()">লগইন করুন</button>
     </div>
 
     <div id="app-content">
         <div id="home-menu">
-            <div class="header"><h1>মেসার্স সাগর ফিস</h1></div>
+            <div class="header">প্রধান মেনু</div>
             <button class="btn-main" onclick="showMenu('Arat')">আড়ৎ এর হিসাব</button>
             <button class="btn-main" style="background:#e91e63" onclick="showMenu('Company')">বিক্রয়ের হিসাব</button>
             <button class="btn-main" style="background:#6c757d" onclick="location.reload()">লগ আউট</button>
         </div>
 
         <div id="sub-menu">
-            <h3 id="menu-title" style="color:#1a73e8;">তালিকা</h3>
-            <input type="text" id="searchInput" class="search-box" placeholder="নাম খুঁজুন..." onkeyup="filterList()">
+            <div class="header" id="menu-title">তালিকা</div>
             <div id="dynamic-buttons" class="btn-list"></div>
             <button class="btn-main back-btn" onclick="goHome()">← ফিরে যান</button>
         </div>
 
         <div id="tali-khata-page">
-            <div class="header" style="padding: 10px;"><h2 id="tali-title" style="margin:0;">খাতা</h2></div>
+            <div class="header" id="tali-title">খাতা</div>
             <div class="tali-table-container">
                 <div class="tali-header">
                     <div>তারিখ</div><div>সাইজ</div><div>দর</div><div>মোট</div><div>জমা</div><div>জের</div>
                 </div>
                 <iframe id="sheetFrame" src=""></iframe>
             </div>
-            <button class="btn-main back-btn" onclick="closeTali()">← তালিকা মেনুতে ফিরুন</button>
+            <button class="btn-main back-btn" onclick="closeTali()">← তালিকায় ফিরুন</button>
         </div>
     </div>
 </div>
@@ -75,39 +77,39 @@
     const TWO_FACTOR_CODE = "998877"; 
     const MY_SHEET_URL = "https://docs.google.com/spreadsheets/d/10VFHqozMCUa6GlVzraUAloLex-NAHijfwfBl4rBHFSY/preview";
 
-    let savedNames = {
+    function checkPassword() {
+        const pass = document.getElementById('passInput').value;
+        if(pass === MAIN_PASSWORD) {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+        } else {
+            alert("ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।");
+        }
+    }
+
+    function verifyCode() {
+        const code = document.getElementById('twoFactorInput').value;
+        if(code === TWO_FACTOR_CODE) {
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('app-content').style.display = 'block';
+        } else {
+            alert("ভুল সিকিউরিটি কোড!");
+        }
+    }
+
+    const savedNames = {
         'Arat': Array.from({length: 120}, (_, i) => `আড়ৎ ${i + 1}`),
         'Company': Array.from({length: 20}, (_, i) => `কোম্পানি ${i + 1}`)
     };
 
-    function checkPassword() {
-        if(document.getElementById('passInput').value === MAIN_PASSWORD) {
-            document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').style.display = 'block';
-        } else { alert("ভুল পাসওয়ার্ড!"); }
-    }
-
-    function verifyCode() {
-        if(document.getElementById('twoFactorInput').value === TWO_FACTOR_CODE) {
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('app-content').style.display = 'block';
-            document.getElementById('home-menu').style.display = 'block';
-        } else { alert("ভুল কোড!"); }
-    }
-
-    let currentType = '';
     function showMenu(type) {
-        currentType = type;
         document.getElementById('home-menu').style.display = 'none';
         document.getElementById('sub-menu').style.display = 'block';
-        document.getElementById('menu-title').innerText = type === 'Arat' ? "আড়ৎ তালিকা" : "কোম্পানি তালিকা";
-        renderList(savedNames[type]);
-    }
-
-    function renderList(list) {
+        document.getElementById('menu-title').innerText = type === 'Arat' ? "আড়ৎ নির্বাচন করুন" : "কোম্পানি নির্বাচন করুন";
+        
         const container = document.getElementById('dynamic-buttons');
         container.innerHTML = "";
-        list.forEach((name) => {
+        savedNames[type].forEach((name) => {
             const row = document.createElement('div');
             row.className = 'item-row';
             row.innerHTML = `<div class="item-name">${name}</div>`;
@@ -126,12 +128,7 @@
     function closeTali() {
         document.getElementById('tali-khata-page').style.display = 'none';
         document.getElementById('sub-menu').style.display = 'block';
-    }
-
-    function filterList() {
-        const term = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = savedNames[currentType].filter(n => n.toLowerCase().includes(term));
-        renderList(filtered);
+        document.getElementById('sheetFrame').src = "";
     }
 
     function goHome() {
@@ -139,5 +136,6 @@
         document.getElementById('home-menu').style.display = 'block';
     }
 </script>
+
 </body>
 </html>
