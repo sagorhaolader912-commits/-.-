@@ -5,19 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>মেসার্স সাগর ফিস</title>
     <style>
-        html, body { 
-            margin: 0; padding: 0; height: 100%; width: 100%; 
-            overflow: hidden; background-color: #f8f9fa; 
-            font-family: 'Segoe UI', Arial, sans-serif;
-        }
+        html, body { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background-color: #f8f9fa; font-family: 'Segoe UI', Arial, sans-serif; }
+        .container { height: 100%; width: 100%; max-width: 800px; margin: auto; background: white; display: flex; flex-direction: column; position: relative; }
 
-        .container { 
-            height: 100%; width: 100%; max-width: 800px; 
-            margin: auto; background: white; display: flex; 
-            flex-direction: column; position: relative;
-        }
-
-        /* স্টাইলিশ হেডলাইন এবং ব্যাক বাটন এরিয়া */
+        /* স্টাইলিশ হেডলাইন এবং পারমানেন্ট ব্যাক বাটন এরিয়া */
         .header-container {
             background: linear-gradient(135deg, #1a73e8, #0d47a1);
             color: #ffffff;
@@ -33,59 +24,38 @@
         /* পারমানেন্ট ব্যাক বাটন (কোনায়) */
         .back-icon {
             position: absolute;
-            left: 15px;
-            font-size: 24px;
+            left: 10px;
+            font-size: 20px;
             cursor: pointer;
-            display: none; /* শুরুতে লুকানো থাকবে */
-            background: rgba(255,255,255,0.2);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: none;
+            background: #28a745; /* সবুজ বাটন */
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            display: none; /* জাভাস্ক্রিপ্ট দিয়ে কন্ট্রোল হবে */
             align-items: center;
             justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        .main-title { 
-            font-size: 24px; font-weight: 800; 
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+        .main-title { font-size: 24px; font-weight: 800; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
 
-        /* মেনু লিস্ট সেটিংস */
         #app-content, #sub-menu, #tali-khata-page { display: none; flex-direction: column; height: 100%; }
-
-        .menu-list {
-            display: flex; flex-direction: column; 
-            gap: 12px; padding: 25px 20px;
-        }
-
-        .btn-main { 
-            padding: 18px; width: 100%; border: none; 
-            border-radius: 12px; cursor: pointer; font-weight: bold; 
-            color: white; background: #28a745; font-size: 16px;
-            box-shadow: 0 3px 5px rgba(0,0,0,0.1);
-        }
+        .menu-list { display: flex; flex-direction: column; gap: 12px; padding: 25px 20px; }
+        .btn-main { padding: 18px; width: 100%; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; color: white; background: #28a745; font-size: 16px; box-shadow: 0 3px 5px rgba(0,0,0,0.1); }
 
         /* খাতা স্ক্রল সেটিংস */
         .scroll-wrapper { flex-grow: 1; overflow-x: auto; overflow-y: hidden; display: flex; flex-direction: column; }
-        
-        .fixed-header-row { 
-            display: flex; background: #0d47a1; color: white; font-size: 13px; font-weight: bold; 
-            min-width: 600px; padding: 12px 0; flex-shrink: 0;
-        }
+        .fixed-header-row { display: flex; background: #0d47a1; color: white; font-size: 13px; font-weight: bold; min-width: 600px; padding: 12px 0; flex-shrink: 0; }
         .fixed-header-row div { width: 100px; text-align: center; border-right: 1px solid rgba(255,255,255,0.1); }
-
         .tali-table-container { flex-grow: 1; min-width: 600px; height: 100%; }
         iframe { width: 100%; height: 100%; border: none; }
 
         .item-list { overflow-y: auto; flex-grow: 1; padding: 15px; }
         .item-row { padding: 18px; background: #f8f9fa; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 12px; font-weight: bold; text-align: left; }
 
-        #login-screen {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: white; z-index: 10000; display: flex; 
-            flex-direction: column; justify-content: center; align-items: center;
-        }
+        #login-screen { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         input { width: 80%; padding: 15px; margin: 20px 0; border: 2px solid #ddd; border-radius: 12px; text-align: center; }
     </style>
 </head>
@@ -96,10 +66,17 @@
         <div class="header-container" style="width: 100%; position: absolute; top: 0; box-sizing: border-box;">
             <div class="main-title">মেসার্স সাগর ফিস</div>
         </div>
-        <input type="password" id="passInput" placeholder="সিকিউরিটি পাসওয়ার্ড">
+        <input type="password" id="passInput" placeholder="পাসওয়ার্ড দিন">
         <button class="btn-main" style="width: 80%; background: #1a73e8;" onclick="checkPassword()">লগইন করুন</button>
     </div>
 
     <div id="app-header" class="header-container" style="display: none;">
         <div id="backBtn" class="back-icon" onclick="goBack()">←</div>
-        <div id="dynamic-title" class="main-title">মেসার্স সাগর
+        <div id="dynamic-title" class="main-title">মেসার্স সাগর ফিস</div>
+    </div>
+
+    <div id="app-content" style="flex-grow: 1;">
+        <div id="home-menu" style="display: flex; flex-direction: column;">
+            <div class="menu-list">
+                <button class="btn-main" onclick="showMenu('Arat')">আড়ৎ এর হিসাব</button>
+                <button class="btn-main" style="background:#e91
