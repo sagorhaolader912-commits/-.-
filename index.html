@@ -6,44 +6,36 @@
     <title>মেসার্স সাগর ফিস</title>
     <style>
         * { box-sizing: border-box; }
-        body, html { margin: 0; padding: 0; height: 100vh; width: 100%; background: #f4f6f9; font-family: Arial, sans-serif; }
+        body, html { margin: 0; padding: 0; height: 100vh; width: 100%; background: #f4f6f9; font-family: Arial, sans-serif; overflow: hidden; }
         
-        /* লগইন ডিজাইন */
+        /* ছোট লগইন বক্স */
         #login-page { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .login-box { width: 250px; padding: 20px; text-align: center; border: 1px solid #ddd; border-radius: 10px; }
-        .site-name { color: #1a73e8; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
-        .login-input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; text-align: center; }
-        .login-btn { width: 100%; padding: 10px; border: none; border-radius: 5px; background: #28a745; color: white; font-weight: bold; cursor: pointer; }
+        .login-box { width: 250px; padding: 25px; text-align: center; border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .site-name { color: #1a73e8; font-size: 18px; font-weight: bold; margin-bottom: 20px; }
+        .login-input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 15px; outline: none; }
+        .login-btn { width: 100%; padding: 12px; border: none; border-radius: 6px; background: #28a745; color: white; font-weight: bold; cursor: pointer; font-size: 15px; }
 
         /* মেইন অ্যাপ্লিকেশন */
-        #main-app { display: none; height: 100vh; flex-direction: column; }
-        .header { background: #1a73e8; color: white; padding: 12px; text-align: center; font-size: 18px; font-weight: bold; position: relative; }
-        .back-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #28a745; color: white; padding: 4px 10px; border-radius: 5px; display: none; border: none; }
+        #main-app { display: none; height: 100vh; flex-direction: column; width: 100%; }
+        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-size: 18px; font-weight: bold; position: relative; width: 100%; }
+        .back-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #28a745; color: white; padding: 5px 10px; border-radius: 5px; display: none; border: none; cursor: pointer; }
 
-        .menu-area { padding: 20px 15px; display: flex; flex-direction: column; align-items: center; gap: 15px; flex-grow: 1; }
-        .btn-container { background: white; padding: 15px 10px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.08); border: 1px solid #eee; width: 85%; max-width: 340px; text-align: center; }
-        .btn { padding: 12px; border: none; border-radius: 10px; font-weight: bold; color: white; font-size: 16px; width: 100%; cursor: pointer; }
+        .menu-area { padding: 25px 15px; display: flex; flex-direction: column; align-items: center; gap: 20px; flex-grow: 1; overflow-y: auto; }
+        .btn-container { background: white; padding: 18px 10px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #eee; width: 90%; max-width: 350px; text-align: center; }
+        .btn { padding: 15px; border: none; border-radius: 10px; font-weight: bold; color: white; font-size: 17px; width: 100%; cursor: pointer; margin-bottom: 10px; }
         .btn-green { background: #28a745; }
         .btn-pink { background: #e91e63; }
         
-        /* জমা ও জের - অনেক ছোট করে দেওয়া হলো */
-        .shortcut-stats { 
-            margin-top: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 2px; 
-        }
-        .stat-item {
-            display: block;
-            font-size: 14px !important; /* একদম ছোট করা হয়েছে */
-            font-weight: 600 !important; /* লেখাও চিকন করা হয়েছে */
-        }
+        /* জমা ও জের - আপনার পছন্দের ছোট সাইজ */
+        .shortcut-stats { margin-top: 5px; display: flex; flex-direction: column; gap: 4px; }
+        .stat-item { display: block; font-size: 14px; font-weight: 600; }
         .stat-joma { color: #2e7d32; } 
         .stat-jer { color: #c62828; }  
 
-        .list-container { flex-grow: 1; overflow-y: auto; padding: 15px; display: none; }
-        .item-card { padding: 15px; background: #fff; border: 1px solid #eee; margin-bottom: 8px; border-radius: 10px; font-weight: bold; text-align: center; font-size: 15px; }
-        .sheet-container { flex-grow: 1; display: none; }
+        /* তালিকা ও শিট এরিয়া */
+        .list-container { flex-grow: 1; overflow-y: auto; padding: 15px; display: none; width: 100%; }
+        .item-card { padding: 15px; background: #fff; border: 1px solid #eee; margin-bottom: 10px; border-radius: 10px; font-weight: bold; text-align: center; font-size: 16px; cursor: pointer; }
+        .sheet-container { flex-grow: 1; display: none; width: 100%; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
@@ -53,11 +45,11 @@
         <div class="login-box">
             <div class="site-name">মেসার্স সাগর ফিস</div>
             <div id="step1">
-                <input type="password" id="passInput" class="login-input" placeholder="পাসওয়ার্ড">
+                <input type="password" id="passInput" class="login-input" placeholder="পাসওয়ার্ড দিন">
                 <button class="login-btn" onclick="checkPass()">পরবর্তী</button>
             </div>
             <div id="step2" style="display: none;">
-                <input type="number" id="codeInput" class="login-input" placeholder="কোড">
+                <input type="number" id="codeInput" class="login-input" placeholder="কোড দিন">
                 <button class="login-btn" style="background: #1a73e8;" onclick="checkCode()">লগইন</button>
             </div>
         </div>
@@ -65,7 +57,7 @@
 
     <div id="main-app">
         <div class="header">
-            <button id="backIcon" class="back-btn" onclick="handleBack()">←</button>
+            <button id="backIcon" class="back-btn" onclick="handleBack()">← ফিরে যান</button>
             <span id="topTitle">মেসার্স সাগর ফিস</span>
         </div>
 
@@ -85,6 +77,7 @@
                     <span class="stat-item stat-jer">মোট জের: ৳ 0.0</span>
                 </div>
             </div>
+            <button style="margin-top: 20px; color: #666; border: none; background: none; text-decoration: underline;" onclick="location.reload()">লগ আউট</button>
         </div>
 
         <div id="list-screen" class="list-container"><div id="list-items"></div></div>
@@ -92,45 +85,49 @@
     </div>
 
 <script>
-    const P = "sagar";
-    const C = "998877";
+    // লগইন তথ্য
+    const PASS = "sagar";
+    const CODE = "998877";
 
     function checkPass() {
-        if(document.getElementById('passInput').value === P) {
+        const p = document.getElementById('passInput').value;
+        if (p === PASS) {
             document.getElementById('step1').style.display = 'none';
             document.getElementById('step2').style.display = 'block';
-        } else { alert("ভুল পাসওয়ার্ড!"); }
+        } else {
+            alert("ভুল পাসওয়ার্ড!");
+        }
     }
 
     function checkCode() {
-        if(document.getElementById('codeInput').value === C) {
+        const c = document.getElementById('codeInput').value;
+        if (String(c) === CODE) {
             document.getElementById('login-page').style.display = 'none';
             document.getElementById('main-app').style.display = 'flex';
-        } else { alert("ভুল কোড!"); }
+        } else {
+            alert("ভুল কোড! ৯৯৮৮৭৭ লিখুন।");
+        }
     }
 
     function showList(type) {
         document.getElementById('home-screen').style.display = 'none';
         document.getElementById('list-screen').style.display = 'block';
         document.getElementById('backIcon').style.display = 'block';
-        document.getElementById('topTitle').innerText = "তালিকা";
+        document.getElementById('topTitle').innerText = (type === 'Arat' ? "আড়ৎ তালিকা" : "কোম্পানি তালিকা");
+        
         let container = document.getElementById('list-items');
         container.innerHTML = "";
         let total = (type === 'Arat' ? 120 : 20);
+        let namePrefix = (type === 'Arat' ? "আড়ৎ " : "কোম্পানি ");
+        
         for (let i = 1; i <= total; i++) {
             let div = document.createElement('div');
             div.className = 'item-card';
-            div.innerText = (type === 'Arat' ? "আড়ৎ " : "কোম্পানি ") + i;
+            div.innerText = namePrefix + i;
             div.onclick = function() {
                 document.getElementById('list-screen').style.display = 'none';
                 document.getElementById('sheet-screen').style.display = 'block';
+                document.getElementById('topTitle').innerText = namePrefix + i;
                 document.getElementById('sheetFrame').src = "https://docs.google.com/spreadsheets/d/10VFHqozMCUa6GlVzraUAloLex-NAHijfwfBl4rBHFSY/edit?rm=minimal";
             };
-            container.appendChild(div);
-        }
-    }
-
-    function handleBack() {
-        if (document.getElementById('sheet-screen').style.display === 'block') {
-            document.getElementById('sheet-screen').style.display = 'none';
-            document.
+            container.appendChild(div
