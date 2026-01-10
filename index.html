@@ -6,69 +6,70 @@
     <title>মেসার্স সাগর ফিস</title>
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { margin: 0; padding: 0; height: 100vh; background: #f4f6f9; font-family: Arial, sans-serif; overflow: hidden; }
+        body, html { margin: 0; padding: 0; height: 100vh; background: #f4f6f9; font-family: 'Segoe UI', Arial, sans-serif; overflow: hidden; }
+        
+        /* লগইন */
         #login-area { position: fixed; inset: 0; background: white; z-index: 1000; display: flex; align-items: center; justify-content: center; }
-        .box { width: 85%; max-width: 320px; padding: 25px; border: 1px solid #ddd; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .login-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; text-align: center; font-size: 16px; display: block; outline: none; }
-        .go-btn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .login-box { width: 85%; max-width: 300px; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #eee; }
+        .login-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; text-align: center; font-size: 16px; outline: none; }
+        .go-btn { width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
+        /* হেডার */
         #main-app { display: none; flex-direction: column; height: 100vh; }
-        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 18px; position: relative; z-index: 101; }
-        .back-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; border: none; }
+        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 18px; position: relative; }
+        .back-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #28a745; color: white; padding: 5px 10px; border-radius: 5px; border: none; font-size: 13px; display: none; }
 
-        /* অটোমেটিক যোগফল বার (যা আপনি চাচ্ছেন) */
-        .auto-summary { 
-            background: #fff; 
-            padding: 10px; 
-            display: flex; 
-            justify-content: space-around; 
-            border-bottom: 2px solid #1a73e8;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: none;
-        }
-        .sum-item { text-align: center; }
-        .sum-label { font-size: 11px; color: #666; display: block; }
-        .sum-value { font-size: 16px; font-weight: bold; color: #1a73e8; }
-        .jer-color { color: #e91e63 !important; }
+        /* ড্যাশবোর্ড বক্স (সবুজ ও গোলাপি) */
+        .summary-card { background: #fff; margin: 10px; padding: 12px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: none; }
+        .summary-row { display: flex; justify-content: space-between; gap: 10px; }
+        .sum-box { flex: 1; padding: 10px; border-radius: 8px; text-align: center; color: white; }
+        .bg-green { background: #28a745; }
+        .bg-pink { background: #e91e63; }
+        .sum-title { font-size: 11px; display: block; opacity: 0.9; }
+        .sum-val { font-size: 18px; font-weight: bold; }
+
+        /* মেনু লিস্ট */
+        .menu-list, #list-screen { padding: 10px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; flex-grow: 1; }
+        .card-item { background: white; padding: 15px; border-radius: 12px; border: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; font-weight: bold; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .card-item:active { background: #f0f0f0; }
 
         #sheet-screen { display: none; flex-grow: 1; width: 100%; height: 100%; }
         iframe { width: 100%; height: 100%; border: none; }
-        
-        .menu-list, #list-screen { padding: 15px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; flex-grow: 1; }
-        .list-item { background: white; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="login-area">
-        <div class="box">
-            <h2 style="color:#1a73e8;">মেসার্স সাগর ফিস</h2>
+        <div class="login-box">
+            <h2 style="color:#1a73e8; margin-top:0;">সাগর ফিস</h2>
             <input type="password" id="p" class="login-input" placeholder="Password">
             <input type="password" id="c" class="login-input" placeholder="Code">
-            <button class="go-btn" onclick="login()">লগইন করুন</button>
+            <button class="go-btn" onclick="login()">লগইন</button>
         </div>
     </div>
 
     <div id="main-app">
         <div class="header">
-            <button id="backIcon" class="back-btn" onclick="handleBack()" style="display:none;">← back</button>
+            <button id="backIcon" class="back-btn" onclick="handleBack()">← Back</button>
             <span id="topTitle">মেসার্স সাগর ফিস</span>
         </div>
 
-        <div id="summaryBar" class="auto-summary">
-            <div class="sum-item">
-                <span class="sum-label">মোট জমা (D20)</span>
-                <span id="d20_val" class="sum-value">শিটে দেখুন</span>
-            </div>
-            <div class="sum-item">
-                <span class="sum-label">মোট জের (F20)</span>
-                <span id="f20_val" class="sum-value jer-color">শিটে দেখুন</span>
+        <div id="summaryCard" class="summary-card">
+            <div class="summary-row">
+                <div class="sum-box bg-green">
+                    <span class="sum-title">মোট জমা</span>
+                    <span id="jomaVal" class="sum-val">0.00</span>
+                </div>
+                <div class="sum-box bg-pink">
+                    <span class="sum-title">মোট জের</span>
+                    <span id="jerVal" class="sum-val">0.00</span>
+                </div>
             </div>
         </div>
 
         <div id="home-screen" class="menu-list">
-            <button class="list-item" onclick="showYear('আড়ৎ')">আড়ৎ এর হিসাব ❯</button>
-            <button class="list-item" onclick="showYear('বিক্রয়')">বিক্রয়ের হিসাব ❯</button>
+            <div class="card-item" onclick="showYear('আড়ৎ')">আড়ৎ এর হিসাব ❯</div>
+            <div class="card-item" onclick="showYear('বিক্রয়')">বিক্রয়ের হিসাব ❯</div>
         </div>
 
         <div id="list-screen" style="display:none;"></div>
@@ -76,54 +77,64 @@
     </div>
 
 <script>
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/edit?usp=sharing";
+
     function login() {
         if(document.getElementById("p").value === "sagarfish" && document.getElementById("c").value === "4321") {
             document.getElementById('login-area').style.display='none';
             document.getElementById('main-app').style.display='flex';
-        } else { alert("Wrong!"); }
+        } else { alert("ভুল তথ্য!"); }
     }
 
-    const SHEET_URL = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/edit?usp=sharing";
-
     function showYear(t) {
-        window.type = t; 
+        window.type = t;
         document.getElementById('home-screen').style.display='none';
         document.getElementById('list-screen').style.display='flex';
         document.getElementById('backIcon').style.display='block';
+        document.getElementById('topTitle').innerText = t + " - বছর";
         let s = document.getElementById('list-screen');
         s.innerHTML = "";
         for(let y=2026; y<=2035; y++) {
-            let d = document.createElement('div'); d.className='list-item'; d.innerHTML=`Year: ${y} ❯`;
-            d.onclick = () => showDates(y); s.appendChild(d);
+            let div = document.createElement('div');
+            div.className = 'card-item';
+            div.innerHTML = `<span>Year: ${y}</span> ❯`;
+            div.onclick = () => showDates(y);
+            s.appendChild(div);
         }
     }
 
     function showDates(y) {
         let s = document.getElementById('list-screen');
         s.innerHTML = "";
+        document.getElementById('topTitle').innerText = window.type + " - " + y;
         let date = new Date(y, 0, 1);
         while(date.getFullYear() === y) {
             let dStr = date.getDate() + "/" + (date.getMonth()+1) + "/" + y;
-            let d = document.createElement('div'); d.className='list-item'; d.innerHTML=`${dStr} ❯`;
-            d.onclick = () => {
-                s.style.display='none'; 
-                document.getElementById('summaryBar').style.display='flex'; // বারটি দেখাবে
+            let div = document.createElement('div');
+            div.className = 'card-item';
+            div.innerHTML = `<span>${dStr}</span> ❯`;
+            div.onclick = () => {
+                document.getElementById('list-screen').style.display='none';
+                document.getElementById('summaryCard').style.display='block';
                 document.getElementById('sheet-screen').style.display='block';
                 document.getElementById('f').src = SHEET_URL;
+                document.getElementById('topTitle').innerText = dStr;
             };
-            s.appendChild(d); date.setDate(date.getDate()+1);
+            s.appendChild(div);
+            date.setDate(date.getDate()+1);
         }
     }
 
     function handleBack() {
         if(document.getElementById('sheet-screen').style.display==='block') {
             document.getElementById('sheet-screen').style.display='none';
-            document.getElementById('summaryBar').style.display='none';
+            document.getElementById('summaryCard').style.display='none';
             document.getElementById('list-screen').style.display='flex';
-        } else {
+        } else if(document.getElementById('list-screen').style.display==='flex') {
             document.getElementById('list-screen').style.display='none';
             document.getElementById('home-screen').style.display='flex';
             document.getElementById('backIcon').style.display='none';
+            document.getElementById('topTitle').innerText = "মেসার্স সাগর ফিস";
         }
     }
 </script>
