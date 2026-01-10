@@ -8,33 +8,32 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { margin: 0; padding: 0; height: 100vh; background: #f4f6f9; font-family: Arial, sans-serif; overflow: hidden; }
         
-        /* লগইন এরিয়া */
         #login-area { position: fixed; inset: 0; background: white; z-index: 1000; display: flex; align-items: center; justify-content: center; }
         .box { width: 85%; max-width: 320px; padding: 25px; border: 1px solid #ddd; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .login-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; text-align: center; font-size: 16px; display: block; outline: none; }
-        
-        .show-pass-label { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; font-size: 14px; color: #555; cursor: pointer; user-select: none; }
-        .go-btn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .go-btn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* মেইন অ্যাপ */
         #main-app { display: none; flex-direction: column; height: 100vh; }
-        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 18px; position: relative; z-index: 101; }
-        .back-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; border: none; font-size: 14px; display: none; }
+        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 18px; position: relative; }
+        .back-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; border: none; display: none; }
         
-        .menu-list, #list-screen { padding: 20px; display: flex; flex-direction: column; gap: 15px; align-items: center; overflow-y: auto; flex-grow: 1; }
-        .card { background: white; width: 100%; max-width: 350px; padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .btn { width: 100%; padding: 18px; border: none; border-radius: 12px; color: white; font-weight: bold; font-size: 18px; cursor: pointer; }
+        /* মেইন স্ক্রিন কার্ড */
+        .summary-card { background: #fff; margin: 15px; padding: 15px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; display: none; }
+        .summary-row { display: flex; justify-content: space-around; margin-top: 10px; }
+        .sum-box { background: #f8f9fa; padding: 10px; border-radius: 8px; border: 1px solid #eee; width: 45%; }
+        .sum-val { font-size: 18px; font-weight: bold; color: #1a73e8; display: block; }
+
+        .menu-list, #list-screen { padding: 10px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; flex-grow: 1; }
+        .card { background: white; padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #eee; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; color: white; font-weight: bold; font-size: 16px; }
         .btn-green { background: #28a745; }
         .btn-pink { background: #e91e63; }
 
-        #search-container { padding: 10px; background: #fff; border-bottom: 1px solid #eee; display: none; }
-        #globalSearch { width: 100%; padding: 12px; border: 2px solid #1a73e8; border-radius: 8px; font-size: 16px; }
-        
-        #list-screen { display: none; background: #fff; }
-        .list-item { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; width: 100%; cursor: pointer; }
-        
-        /* এডিট শিট ফ্রেম */
-        #sheet-screen { display: none; flex-grow: 1; position: relative; width: 100%; height: 100%; }
+        #list-screen .list-item { background: white; padding: 15px; border-radius: 10px; display: flex; flex-direction: column; border-bottom: 1px solid #eee; cursor: pointer; }
+        .date-text { font-weight: bold; font-size: 16px; }
+        .mini-info { font-size: 12px; color: #666; margin-top: 5px; }
+
+        #sheet-screen { display: none; flex-grow: 1; width: 100%; height: 100%; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
@@ -42,20 +41,103 @@
 
     <div id="login-area">
         <div class="box">
-            <h2 style="color:#1a73e8; margin-bottom:20px;">মেসার্স সাগর ফিস</h2>
-            
-            <input type="password" id="passIn" class="login-input" placeholder="পাসওয়ার্ড লিখুন">
-            <input type="password" id="codeIn" class="login-input" placeholder="কোড লিখুন">
-            
-            <label class="show-pass-label">
-                <input type="checkbox" onclick="togglePassView()"> Show Password
-            </label>
-
-            <button class="go-btn" onclick="checkFinalLogin()">লগইন করুন</button>
-            <p style="font-size: 10px; color: #aaa; margin-top: 15px;">Final Secure Version 7.0</p>
+            <h2 style="color:#1a73e8;">মেসার্স সাগর ফিস</h2>
+            <input type="password" id="p_in" class="login-input" placeholder="Password">
+            <input type="password" id="c_in" class="login-input" placeholder="Code">
+            <button class="go-btn" onclick="startApp()">লগইন করুন</button>
         </div>
     </div>
 
     <div id="main-app">
         <div class="header">
-            <button id="backIcon" class="back-btn" onclick="handleBack()">← back</
+            <button id="backIcon" class="back-btn" onclick="handleBack()">← back</button>
+            <span id="topTitle">মেসার্স সাগর ফিস</span>
+        </div>
+
+        <div id="summaryCard" class="summary-card">
+            <div id="summaryDate" style="font-weight: bold; color: #555;">আজকের সারসংক্ষেপ</div>
+            <div class="summary-row">
+                <div class="sum-box"><span>মোট জমা</span><span id="totalJoma" class="sum-val">০.০০</span></div>
+                <div class="sum-box"><span>মোট জের</span><span id="totalJer" class="sum-val">০.০০</span></div>
+            </div>
+        </div>
+
+        <div id="home-screen" class="menu-list">
+            <div class="card"><button class="btn btn-green" onclick="showYearList('আড়ৎ')">আড়ৎ এর হিসাব</button></div>
+            <div class="card"><button class="btn btn-pink" onclick="showYearList('বিক্রয়')">বিক্রয়ের হিসাব</button></div>
+        </div>
+
+        <div id="list-screen"></div>
+        <div id="sheet-screen"><iframe id="sheetFrame" src=""></iframe></div>
+    </div>
+
+<script>
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/edit?usp=sharing";
+
+    function startApp() {
+        if (document.getElementById("p_in").value === "sagarfish" && document.getElementById("c_in").value === "4321") {
+            document.getElementById('login-area').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+        } else { alert("Wrong Info!"); }
+    }
+
+    function showYearList(type) {
+        window.currentType = type;
+        document.getElementById('home-screen').style.display = 'none';
+        document.getElementById('list-screen').style.display = 'flex';
+        document.getElementById('backIcon').style.display = 'block';
+        document.getElementById('topTitle').innerText = type + " - বছর";
+        
+        let container = document.getElementById('list-screen');
+        container.innerHTML = "";
+        for (let year = 2026; year <= 2026; year++) { // উদাহরণস্বরূপ শুধু ২০২৬ রাখা হয়েছে
+            let div = document.createElement('div');
+            div.className = 'list-item';
+            div.innerHTML = `<span class="date-text">Year: ${year}</span>`;
+            div.onclick = () => showDateList(year);
+            container.appendChild(div);
+        }
+    }
+
+    function showDateList(year) {
+        let container = document.getElementById('list-screen');
+        container.innerHTML = "";
+        document.getElementById('topTitle').innerText = window.currentType + " - " + year;
+        
+        // এখানে তারিখের লিস্টের সাথে ছোট করে হিসাব দেখানোর ব্যবস্থা করা হয়েছে
+        let date = new Date(year, 0, 1);
+        while (date.getFullYear() === year) {
+            let dStr = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+            let div = document.createElement('div');
+            div.className = 'list-item';
+            div.innerHTML = `
+                <span class="date-text">${dStr}</span>
+                <span class="mini-info">মোট হিসাব দেখতে ক্লিক করুন ❯</span>
+            `;
+            div.onclick = () => {
+                document.getElementById('list-screen').style.display = 'none';
+                document.getElementById('summaryCard').style.display = 'block'; // ড্যাশবোর্ড দেখাবে
+                document.getElementById('summaryDate').innerText = dStr + " এর হিসাব";
+                document.getElementById('sheet-screen').style.display = 'block';
+                document.getElementById('sheetFrame').src = SHEET_URL;
+            };
+            container.appendChild(div);
+            date.setDate(date.getDate() + 1);
+        }
+    }
+
+    function handleBack() {
+        if (document.getElementById('sheet-screen').style.display === 'block') {
+            document.getElementById('sheet-screen').style.display = 'none';
+            document.getElementById('summaryCard').style.display = 'none';
+            document.getElementById('list-screen').style.display = 'flex';
+        } else {
+            document.getElementById('list-screen').style.display = 'none';
+            document.getElementById('home-screen').style.display = 'flex';
+            document.getElementById('backIcon').style.display = 'none';
+            document.getElementById('topTitle').innerText = "মেসার্স সাগর ফিস";
+        }
+    }
+</script>
+</body>
+</html>
