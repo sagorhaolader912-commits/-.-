@@ -104,4 +104,37 @@
             row.className = 'item-row';
 
             const nameBtn = document.createElement('button');
-            name
+            nameBtn.className = 'item-name';
+            nameBtn.innerText = name;
+            nameBtn.onclick = () => {
+                const frame = document.getElementById('sheetFrame');
+                frame.style.display = 'block';
+                frame.src = mySheetLink + "&rm=minimal";
+            };
+
+            const dotBtn = document.createElement('button');
+            dotBtn.className = 'three-dot';
+            dotBtn.innerHTML = "⋮";
+            dotBtn.onclick = () => {
+                let newName = prompt("নতুন নাম লিখুন:", name);
+                if (newName && newName.trim() !== "") {
+                    savedNames[type][index] = newName;
+                    localStorage.setItem('sagarFishNames', JSON.stringify(savedNames));
+                    renderButtons(type);
+                }
+            };
+
+            row.appendChild(nameBtn);
+            row.appendChild(dotBtn);
+            container.appendChild(row);
+        });
+    }
+
+    function goHome() {
+        document.getElementById('home-menu').style.display = 'block';
+        document.getElementById('sub-menu').style.display = 'none';
+        document.getElementById('sheetFrame').style.display = 'none';
+    }
+</script>
+</body>
+</html>
