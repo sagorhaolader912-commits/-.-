@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>মেসার্স সাগর ফিস - সিকিউর লগইন</title>
+    <title>মেসার্স সাগর ফিস</title>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; text-align: center; background-color: #eef2f3; margin: 0; padding: 20px; }
         .login-box { max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .header { background: #1a73e8; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
         input { width: 90%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; text-align: center; }
-        .btn-next { width: 95%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .btn-action { width: 95%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         #step2, #app-content { display: none; }
-        .error { color: red; font-weight: bold; margin-top: 10px; display: none; }
+        .error { color: red; font-weight: bold; display: none; margin-top: 10px; }
         
-        /* অ্যাপ কন্টেন্ট স্টাইল আগের মতোই থাকবে */
+        /* অ্যাপ কন্টেন্ট */
         .btn-main { padding: 18px; width: 95%; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; margin: 8px; color: white; background: #28a745; }
-        .btn-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-height: 400px; overflow-y: auto; padding: 10px; border: 1px solid #eee; }
+        .btn-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-height: 400px; overflow-y: auto; padding: 10px; border: 1px solid #eee; border-radius: 10px; }
         .btn-item { padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #e3f2fd; font-weight: bold; cursor: pointer; }
-        iframe { width: 100%; height: 500px; border-radius: 10px; margin-top: 20px; display: none; }
+        iframe { width: 100%; height: 500px; border-radius: 10px; margin-top: 20px; display: none; border: 1px solid #ddd; }
+        .info-text { font-size: 12px; color: #666; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -26,61 +27,57 @@
     <div id="step1" class="login-box">
         <div class="header"><h3>মেসার্স সাগর ফিস</h3></div>
         <h4>পাসওয়ার্ড দিন</h4>
-        <input type="password" id="passInput" placeholder="পাসওয়ার্ড লিখুন">
-        <button class="btn-next" onclick="checkPassword()">পরবর্তী ধাপ</button>
+        <input type="password" id="passInput" placeholder="পাসওয়ার্ড">
+        <button class="btn-action" onclick="checkPassword()">পরবর্তী ধাপ</button>
         <p id="err1" class="error">ভুল পাসওয়ার্ড!</p>
     </div>
 
     <div id="step2" class="login-box">
-        <div class="header"><h3>2-Step Verification</h3></div>
-        <p>আপনার মোবাইলে পাঠানো ভেরিফিকেশন কোডটি দিন</p>
+        <div class="header"><h3>নিরাপত্তা যাচাই</h3></div>
+        <p>ভেরিফিকেশন কোডটি দিন</p>
         <input type="number" id="twoFactorInput" placeholder="৬ ডিজিট কোড">
-        <button class="btn-next" onclick="verifyCode()">ভেরিফাই করুন</button>
-        <p id="err2" class="error">ভুল ভেরিফিকেশন কোড!</p>
+        <button class="btn-action" onclick="verifyCode()">প্রবেশ করুন</button>
+        <p id="err2" class="error">ভুল কোড!</p>
     </div>
 
     <div id="app-content">
         <div class="header"><h1>মেসার্স সাগর ফিস</h1></div>
         <div id="home-menu">
-            <button class="btn-main" onclick="showMenu('Arat')">আড়ৎ এর হিসাব</button>
-            <button class="btn-main" style="background:#e91e63" onclick="showMenu('Company')">বিক্রয়ের হিসাব</button>
+            <button class="btn-main" onclick="showMenu('Arat')">আড়ৎ এর হিসাব (১২০)</button>
+            <button class="btn-main" style="background:#e91e63" onclick="showMenu('Company')">বিক্রয়ের হিসাব (২০)</button>
+            <button class="btn-main" style="background:#f39c12" onclick="resetNames()">নামগুলো রিসেট করুন</button>
             <button class="btn-main" style="background:#6c757d" onclick="location.reload()">লগ আউট</button>
         </div>
         
         <div id="sub-menu" style="display:none;">
+            <h3 id="menu-title">তালিকা</h3>
+            <p class="info-text">নাম বদলাতে বাটনের ওপর চেপে ধরে রাখুন</p>
             <div id="dynamic-buttons" class="btn-list"></div>
-            <button class="btn-next" style="background:#6c757d; margin-top:10px;" onclick="goHome()">পেছনে যান</button>
+            <button class="btn-action" style="background:#6c757d" onclick="goHome()">← পেছনে যান</button>
         </div>
         <iframe id="sheetFrame" src=""></iframe>
     </div>
 </div>
 
 <script>
-    // এই কোডগুলো আপনি আপনার মতো করে সেট করবেন
-    const MAIN_PASSWORD = "sagar"; // আপনার পাসওয়ার্ড
-    const TWO_FACTOR_CODE = "998877"; // আপনার মোবাইলের জন্য নির্ধারিত সিক্রেট কোড
-
+    const MAIN_PASSWORD = "sagar"; 
+    const TWO_FACTOR_CODE = "998877"; 
     const mySheetLink = "https://docs.google.com/spreadsheets/d/1BlbOrJsve7AjU9Yn9qze8k5qNcVeaKqI_HXXG42RKE/edit?usp=sharing";
 
     function checkPassword() {
         if(document.getElementById('passInput').value === MAIN_PASSWORD) {
             document.getElementById('step1').style.display = 'none';
             document.getElementById('step2').style.display = 'block';
-        } else {
-            document.getElementById('err1').style.display = 'block';
-        }
+        } else { document.getElementById('err1').style.display = 'block'; }
     }
 
     function verifyCode() {
         if(document.getElementById('twoFactorInput').value === TWO_FACTOR_CODE) {
             document.getElementById('step2').style.display = 'none';
             document.getElementById('app-content').style.display = 'block';
-        } else {
-            document.getElementById('err2').style.display = 'block';
-        }
+        } else { document.getElementById('err2').style.display = 'block'; }
     }
 
-    // আগের রিনেম এবং মেনু ফাংশনগুলো এখানে থাকবে...
     let savedNames = JSON.parse(localStorage.getItem('sagarFishNames')) || {
         'Arat': Array.from({length: 120}, (_, i) => `আড়ৎ ${i + 1}`),
         'Company': Array.from({length: 20}, (_, i) => `কোম্পানি ${i + 1}`)
@@ -89,19 +86,45 @@
     function showMenu(type) {
         document.getElementById('home-menu').style.display = 'none';
         document.getElementById('sub-menu').style.display = 'block';
+        document.getElementById('menu-title').innerText = type === 'Arat' ? "আড়ৎ নির্বাচন করুন:" : "কোম্পানি নির্বাচন করুন:";
+        renderButtons(type);
+    }
+
+    function renderButtons(type) {
         const container = document.getElementById('dynamic-buttons');
         container.innerHTML = ""; 
         savedNames[type].forEach((name, index) => {
             const btn = document.createElement('button');
             btn.className = 'btn-item';
             btn.innerText = name;
+            
             btn.onclick = () => {
                 const frame = document.getElementById('sheetFrame');
                 frame.style.display = 'block';
                 frame.src = mySheetLink + "&rm=minimal";
             };
+
+            let timer;
+            btn.onmousedown = btn.ontouchstart = () => {
+                timer = setTimeout(() => {
+                    let newName = prompt("নতুন নাম লিখুন:", name);
+                    if (newName) {
+                        savedNames[type][index] = newName;
+                        localStorage.setItem('sagarFishNames', JSON.stringify(savedNames));
+                        renderButtons(type);
+                    }
+                }, 800);
+            };
+            btn.onmouseup = btn.onmouseleave = btn.ontouchend = () => clearTimeout(timer);
             container.appendChild(btn);
         });
+    }
+
+    function resetNames() {
+        if(confirm("সব নাম রিসেট করবেন?")) {
+            localStorage.removeItem('sagarFishNames');
+            location.reload();
+        }
     }
 
     function goHome() {
