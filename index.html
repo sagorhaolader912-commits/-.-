@@ -2,77 +2,99 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>মেসার্স সাগর ফিস</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; text-align: center; background-color: #f0f2f5; margin: 0; padding: 10px; }
-        .container { max-width: 650px; margin: auto; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); min-height: 95vh; }
-        .header { background: #1a73e8; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 20px; font-weight: bold; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f2f5; overflow: hidden; }
+        .container { max-width: 800px; margin: auto; background: white; height: 100vh; display: flex; flex-direction: column; }
+        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-size: 20px; font-weight: bold; }
         
-        .btn-main { padding: 18px; width: 95%; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; margin: 8px auto; color: white; background: #28a745; font-size: 16px; display: block; }
-        .btn-list { display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto; padding: 5px; }
-        .item-row { background: #ffffff; border-radius: 10px; border: 1px solid #dfe1e5; margin-bottom: 5px; cursor: pointer; padding: 15px; text-align: left; font-weight: 600; color: #333; }
+        /* ডানে-বামে সরানোর কন্টেইনার */
+        .scroll-wrapper {
+            overflow-x: auto; /* ডানে-বামে সরানোর জন্য */
+            overflow-y: hidden;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
 
-        /* Summary Equation Boxes */
-        .summary-container { display: flex; gap: 10px; margin: 15px 0; justify-content: center; }
-        .summary-box { flex: 1; padding: 15px; border-radius: 12px; color: white; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .joma-box { background: #28a745; }
-        .jer-box { background: #dc3545; }
-        .summary-val { font-size: 20px; display: block; margin-top: 5px; }
+        /* হেডলাইন ডিজাইন - যা গুগল শিটের সাথে মিলবে */
+        .fixed-header-row {
+            display: flex;
+            background: #1a73e8;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            min-width: 600px; /* গুগল শিটের কলামের সাথে মিল রাখতে */
+            padding: 10px 0;
+            border-bottom: 2px solid #fff;
+        }
+        .fixed-header-row div {
+            width: 100px; /* প্রতিটি বক্সের সমান চওড়া */
+            text-align: center;
+            border-right: 1px solid rgba(255,255,255,0.3);
+        }
 
-        .tali-table-container { margin-top: 10px; border: 2px solid #1a73e8; border-radius: 10px; overflow: hidden; background: #fff; }
-        iframe { width: 100%; height: 500px; border: none; background: #fff; }
-        .back-btn { background: #6c757d !important; width: 95%; margin: 10px auto; }
-        
-        #step2, #app-content, #sub-menu, #tali-khata-page { display: none; }
-        input { width: 85%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; text-align: center; }
+        /* গুগল শিটের এরিয়া */
+        .tali-table-container {
+            flex-grow: 1;
+            min-width: 600px; /* হেডলাইনের সমান রাখতে হবে */
+            background: #fff;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .btn-main { padding: 18px; width: 90%; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; margin: 10px auto; color: white; background: #28a745; font-size: 16px; display: block; }
+        .back-btn { background: #6c757d !important; width: 100%; margin: 0; border-radius: 0; }
+
+        #app-content, #sub-menu, #tali-khata-page { display: none; flex-direction: column; height: 100%; }
+        .item-list { overflow-y: auto; flex-grow: 1; padding: 10px; }
+        .item-row { padding: 15px; background: #f8f9fa; border: 1px solid #ddd; margin-bottom: 5px; border-radius: 8px; text-align: left; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="step1">
+    <div id="step1" style="padding-top: 50px;">
         <div class="header">মেসার্স সাগর ফিস</div>
-        <input type="password" id="passInput" placeholder="পাসওয়ার্ড">
+        <input type="password" id="passInput" style="width: 80%; padding: 12px; margin: 20px auto; display: block; text-align: center;" placeholder="পাসওয়ার্ড">
         <button class="btn-main" onclick="checkPassword()">পরবর্তী</button>
-    </div>
-    
-    <div id="step2" style="display:none;">
-        <div class="header">নিরাপত্তা কোড</div>
-        <input type="number" id="twoFactorInput" placeholder="কোড">
-        <button class="btn-main" onclick="verifyCode()">লগইন</button>
     </div>
 
     <div id="app-content">
-        <div id="home-menu">
+        <div id="home-menu" style="display: block;">
             <div class="header">প্রধান মেনু</div>
             <button class="btn-main" onclick="showMenu('Arat')">আড়ৎ এর হিসাব</button>
             <button class="btn-main" style="background:#e91e63" onclick="showMenu('Company')">বিক্রয়ের হিসাব</button>
         </div>
 
         <div id="sub-menu">
-            <h3 id="menu-title" style="color:#1a73e8;">তালিকা</h3>
-            <div id="dynamic-buttons" class="btn-list"></div>
+            <div class="header">তালিকা</div>
+            <div id="dynamic-buttons" class="item-list"></div>
             <button class="btn-main back-btn" onclick="goHome()">← ফিরে যান</button>
         </div>
 
         <div id="tali-khata-page">
-            <div class="header" id="tali-title" style="padding: 10px;">খাতা</div>
+            <div class="header" id="tali-title">খাতা</div>
             
-            <div class="summary-container">
-                <div class="summary-box joma-box">
-                    আজকের জমা
-                    <span id="totalJoma" class="summary-val">হিসাব হচ্ছে...</span>
+            <div class="scroll-wrapper">
+                <div class="fixed-header-row">
+                    <div>তারিখ</div>
+                    <div>ওজন</div>
+                    <div>দর</div>
+                    <div>মোট টাকা</div>
+                    <div>জমা</div>
+                    <div>জের</div>
                 </div>
-                <div class="summary-box jer-box">
-                    আজকের জের
-                    <span id="totalJer" class="summary-val">হিসাব হচ্ছে...</span>
+
+                <div class="tali-table-container">
+                    <iframe id="sheetFrame" src=""></iframe>
                 </div>
             </div>
 
-            <div class="tali-table-container">
-                <iframe id="sheetFrame" src=""></iframe>
-            </div>
             <button class="btn-main back-btn" onclick="closeTali()">← তালিকায় ফিরুন</button>
         </div>
     </div>
@@ -80,21 +102,13 @@
 
 <script>
     const MAIN_PASSWORD = "sagar"; 
-    const TWO_FACTOR_CODE = "998877"; 
     const MY_SHEET_URL = "https://docs.google.com/spreadsheets/d/10VFHqozMCUa6GlVzraUAloLex-NAHijfwfBl4rBHFSY/edit?rm=minimal";
 
     function checkPassword() {
         if(document.getElementById('passInput').value === MAIN_PASSWORD) {
             document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').style.display = 'block';
-        }
-    }
-
-    function verifyCode() {
-        if(document.getElementById('twoFactorInput').value === TWO_FACTOR_CODE) {
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('app-content').style.display = 'block';
-        }
+            document.getElementById('app-content').style.display = 'flex';
+        } else { alert("ভুল পাসওয়ার্ড!"); }
     }
 
     const savedNames = {
@@ -104,7 +118,7 @@
 
     function showMenu(type) {
         document.getElementById('home-menu').style.display = 'none';
-        document.getElementById('sub-menu').style.display = 'block';
+        document.getElementById('sub-menu').style.display = 'flex';
         const container = document.getElementById('dynamic-buttons');
         container.innerHTML = "";
         savedNames[type].forEach((name) => {
@@ -118,164 +132,15 @@
 
     function openTaliKhata(name) {
         document.getElementById('sub-menu').style.display = 'none';
-        document.getElementById('tali-khata-page').style.display = 'block';
+        document.getElementById('tali-khata-page').style.display = 'flex';
         document.getElementById('tali-title').innerText = name;
         document.getElementById('sheetFrame').src = MY_SHEET_URL;
-
-        // ডেমো ডাটা (যেহেতু গুগল শিট থেকে জাভাস্ক্রিপ্ট দিয়ে সরাসরি রিড করা একটু জটিল)
-        // আপনি শিটে জমার কলাম যোগ করে এখানে বসাতে পারবেন।
-        setTimeout(() => {
-            document.getElementById('totalJoma').innerText = "৳ ০.০০";
-            document.getElementById('totalJer').innerText = "৳ ০.০০";
-        }, 1000);
     }
 
     function closeTali() {
         document.getElementById('tali-khata-page').style.display = 'none';
-        document.getElementById('sub-menu').style.display = 'block';
-    }
-
-    function goHome() {
-        document.getElementById('sub-menu').style.display = 'none';
-        document.getElementById('home-menu').style.display = 'block';
-    }
-</script>
-</body>
-</html><!DOCTYPE html>
-<html lang="bn">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>মেসার্স সাগর ফিস</title>
-    <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; text-align: center; background-color: #f0f2f5; margin: 0; padding: 10px; }
-        .container { max-width: 650px; margin: auto; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); min-height: 95vh; }
-        .header { background: #1a73e8; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 20px; font-weight: bold; }
-        
-        .btn-main { padding: 18px; width: 95%; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; margin: 8px auto; color: white; background: #28a745; font-size: 16px; display: block; }
-        .btn-list { display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto; padding: 5px; }
-        .item-row { background: #ffffff; border-radius: 10px; border: 1px solid #dfe1e5; margin-bottom: 5px; cursor: pointer; padding: 15px; text-align: left; font-weight: 600; color: #333; }
-
-        /* Summary Equation Boxes */
-        .summary-container { display: flex; gap: 10px; margin: 15px 0; justify-content: center; }
-        .summary-box { flex: 1; padding: 15px; border-radius: 12px; color: white; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .joma-box { background: #28a745; }
-        .jer-box { background: #dc3545; }
-        .summary-val { font-size: 20px; display: block; margin-top: 5px; }
-
-        .tali-table-container { margin-top: 10px; border: 2px solid #1a73e8; border-radius: 10px; overflow: hidden; background: #fff; }
-        iframe { width: 100%; height: 500px; border: none; background: #fff; }
-        .back-btn { background: #6c757d !important; width: 95%; margin: 10px auto; }
-        
-        #step2, #app-content, #sub-menu, #tali-khata-page { display: none; }
-        input { width: 85%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; text-align: center; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div id="step1">
-        <div class="header">মেসার্স সাগর ফিস</div>
-        <input type="password" id="passInput" placeholder="পাসওয়ার্ড">
-        <button class="btn-main" onclick="checkPassword()">পরবর্তী</button>
-    </div>
-    
-    <div id="step2" style="display:none;">
-        <div class="header">নিরাপত্তা কোড</div>
-        <input type="number" id="twoFactorInput" placeholder="কোড">
-        <button class="btn-main" onclick="verifyCode()">লগইন</button>
-    </div>
-
-    <div id="app-content">
-        <div id="home-menu">
-            <div class="header">প্রধান মেনু</div>
-            <button class="btn-main" onclick="showMenu('Arat')">আড়ৎ এর হিসাব</button>
-            <button class="btn-main" style="background:#e91e63" onclick="showMenu('Company')">বিক্রয়ের হিসাব</button>
-        </div>
-
-        <div id="sub-menu">
-            <h3 id="menu-title" style="color:#1a73e8;">তালিকা</h3>
-            <div id="dynamic-buttons" class="btn-list"></div>
-            <button class="btn-main back-btn" onclick="goHome()">← ফিরে যান</button>
-        </div>
-
-        <div id="tali-khata-page">
-            <div class="header" id="tali-title" style="padding: 10px;">খাতা</div>
-            
-            <div class="summary-container">
-                <div class="summary-box joma-box">
-                    আজকের জমা
-                    <span id="totalJoma" class="summary-val">হিসাব হচ্ছে...</span>
-                </div>
-                <div class="summary-box jer-box">
-                    আজকের জের
-                    <span id="totalJer" class="summary-val">হিসাব হচ্ছে...</span>
-                </div>
-            </div>
-
-            <div class="tali-table-container">
-                <iframe id="sheetFrame" src=""></iframe>
-            </div>
-            <button class="btn-main back-btn" onclick="closeTali()">← তালিকায় ফিরুন</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    const MAIN_PASSWORD = "sagar"; 
-    const TWO_FACTOR_CODE = "998877"; 
-    const MY_SHEET_URL = "https://docs.google.com/spreadsheets/d/10VFHqozMCUa6GlVzraUAloLex-NAHijfwfBl4rBHFSY/edit?rm=minimal";
-
-    function checkPassword() {
-        if(document.getElementById('passInput').value === MAIN_PASSWORD) {
-            document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').style.display = 'block';
-        }
-    }
-
-    function verifyCode() {
-        if(document.getElementById('twoFactorInput').value === TWO_FACTOR_CODE) {
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('app-content').style.display = 'block';
-        }
-    }
-
-    const savedNames = {
-        'Arat': Array.from({length: 120}, (_, i) => `আড়ৎ ${i + 1}`),
-        'Company': Array.from({length: 20}, (_, i) => `কোম্পানি ${i + 1}`)
-    };
-
-    function showMenu(type) {
-        document.getElementById('home-menu').style.display = 'none';
-        document.getElementById('sub-menu').style.display = 'block';
-        const container = document.getElementById('dynamic-buttons');
-        container.innerHTML = "";
-        savedNames[type].forEach((name) => {
-            const row = document.createElement('div');
-            row.className = 'item-row';
-            row.innerText = name;
-            row.onclick = () => openTaliKhata(name);
-            container.appendChild(row);
-        });
-    }
-
-    function openTaliKhata(name) {
-        document.getElementById('sub-menu').style.display = 'none';
-        document.getElementById('tali-khata-page').style.display = 'block';
-        document.getElementById('tali-title').innerText = name;
-        document.getElementById('sheetFrame').src = MY_SHEET_URL;
-
-        // ডেমো ডাটা (যেহেতু গুগল শিট থেকে জাভাস্ক্রিপ্ট দিয়ে সরাসরি রিড করা একটু জটিল)
-        // আপনি শিটে জমার কলাম যোগ করে এখানে বসাতে পারবেন।
-        setTimeout(() => {
-            document.getElementById('totalJoma').innerText = "৳ ০.০০";
-            document.getElementById('totalJer').innerText = "৳ ০.০০";
-        }, 1000);
-    }
-
-    function closeTali() {
-        document.getElementById('tali-khata-page').style.display = 'none';
-        document.getElementById('sub-menu').style.display = 'block';
+        document.getElementById('sub-menu').style.display = 'flex';
+        document.getElementById('sheetFrame').src = "";
     }
 
     function goHome() {
