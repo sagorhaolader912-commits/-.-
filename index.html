@@ -8,25 +8,17 @@
         body { font-family: 'Segoe UI', Arial, sans-serif; text-align: center; background-color: #f0f2f5; margin: 0; padding: 10px; }
         .container { max-width: 600px; margin: auto; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); min-height: 95vh; }
         .header { background: #1a73e8; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
-        
-        /* Menu & Buttons */
         .btn-main { padding: 18px; width: 95%; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; margin: 8px; color: white; background: #28a745; font-size: 16px; }
         .search-box { width: 90%; padding: 12px; margin-bottom: 15px; border: 2px solid #1a73e8; border-radius: 10px; outline: none; }
         .btn-list { display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto; padding: 5px; }
         .item-row { display: flex; align-items: center; background: #ffffff; border-radius: 10px; border: 1px solid #dfe1e5; margin-bottom: 5px; }
-        .item-name { flex-grow: 1; padding: 15px; border: none; background: none; font-weight: 600; text-align: left; cursor: pointer; font-size: 15px; }
-        .three-dot { padding: 10px 20px; background: none; border: none; border-left: 1px solid #f1f3f4; cursor: pointer; font-size: 20px; color: #555; }
-
-        /* Digital Tali Khata Design */
+        .item-name { flex-grow: 1; padding: 15px; border: none; background: none; font-weight: 600; text-align: left; cursor: pointer; font-size: 15px; color: #333; }
         .tali-table-container { display: none; margin-top: 10px; border: 2px solid #1a73e8; border-radius: 10px; overflow: hidden; background: #fff; }
-        .tali-header { display: grid; grid-template-columns: 1fr 1fr 0.8fr 0.8fr 0.8fr 0.8fr; background: #1a73e8; color: white; font-size: 10px; font-weight: bold; padding: 12px 2px; }
-        .tali-header div { border-right: 1px solid #ffffff55; }
-        
-        iframe { width: 100%; height: 500px; border: none; background: #fff; }
+        .tali-header { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; background: #1a73e8; color: white; font-size: 10px; font-weight: bold; padding: 12px 2px; }
+        iframe { width: 100%; height: 550px; border: none; background: #fff; display: block; }
         .back-btn { background: #6c757d !important; margin-top: 10px; width: 100%; }
-        
-        #step2, #app-content { display: none; }
-        input[type="password"], input[type="number"] { width: 85%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; text-align: center; }
+        #step2, #app-content, #sub-menu, #tali-khata-page { display: none; }
+        input { width: 85%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; text-align: center; }
     </style>
 </head>
 <body>
@@ -34,46 +26,38 @@
 <div class="container">
     <div id="step1">
         <div class="header"><h3>মেসার্স সাগর ফিস</h3></div>
-        <input type="password" id="passInput" placeholder="পাসওয়ার্ড দিন">
-        <button class="btn-main" onclick="checkPassword()">পরবর্তী ধাপ</button>
+        <input type="password" id="passInput" placeholder="পাসওয়ার্ড">
+        <button class="btn-main" onclick="checkPassword()">পরবর্তী</button>
     </div>
-    
     <div id="step2">
-        <div class="header"><h3>নিরাপত্তা যাচাই</h3></div>
+        <div class="header"><h3>নিরাপত্তা কোড</h3></div>
         <input type="number" id="twoFactorInput" placeholder="৬ ডিজিট কোড">
-        <button class="btn-main" onclick="verifyCode()">লগইন করুন</button>
+        <button class="btn-main" onclick="verifyCode()">লগইন</button>
     </div>
 
     <div id="app-content">
         <div id="home-menu">
             <div class="header"><h1>মেসার্স সাগর ফিস</h1></div>
-            <button class="btn-main" onclick="showMenu('Arat')">আড়ৎ এর হিসাব (১২০)</button>
-            <button class="btn-main" style="background:#e91e63" onclick="showMenu('Company')">বিক্রয়ের হিসাব (২০)</button>
+            <button class="btn-main" onclick="showMenu('Arat')">আড়ৎ এর হিসাব</button>
+            <button class="btn-main" style="background:#e91e63" onclick="showMenu('Company')">বিক্রয়ের হিসাব</button>
             <button class="btn-main" style="background:#6c757d" onclick="location.reload()">লগ আউট</button>
         </div>
 
-        <div id="sub-menu" style="display:none;">
+        <div id="sub-menu">
             <h3 id="menu-title" style="color:#1a73e8;">তালিকা</h3>
-            <input type="text" id="searchInput" class="search-box" placeholder="নাম লিখে খুঁজুন..." onkeyup="filterList()">
+            <input type="text" id="searchInput" class="search-box" placeholder="নাম খুঁজুন..." onkeyup="filterList()">
             <div id="dynamic-buttons" class="btn-list"></div>
-            <button class="btn-main back-btn" onclick="goHome()">← পেছনে যান</button>
+            <button class="btn-main back-btn" onclick="goHome()">← ফিরে যান</button>
         </div>
 
-        <div id="tali-khata-page" style="display:none;">
+        <div id="tali-khata-page">
             <div class="header" style="padding: 10px;"><h2 id="tali-title" style="margin:0;">খাতা</h2></div>
-            
-            <div class="tali-table-container" id="tableHeader" style="display:block;">
+            <div class="tali-table-container" style="display:block;">
                 <div class="tali-header">
-                    <div>তারিখ</div>
-                    <div>সাইজ</div>
-                    <div>দর</div>
-                    <div>মোট</div>
-                    <div>জমা</div>
-                    <div>জের</div>
+                    <div>তারিখ</div><div>সাইজ</div><div>দর</div><div>মোট</div><div>জমা</div><div>জের</div>
                 </div>
                 <iframe id="sheetFrame" src=""></iframe>
             </div>
-            
             <button class="btn-main back-btn" onclick="closeTali()">← তালিকা মেনুতে ফিরুন</button>
         </div>
     </div>
@@ -82,8 +66,8 @@
 <script>
     const MAIN_PASSWORD = "sagar"; 
     const TWO_FACTOR_CODE = "998877"; 
-    // Apnar dewa Sheet Link
-    const MY_SHEET_URL = "https://docs.google.com/spreadsheets/d/10VFHqozMCUa6GlVzraUAloLex-NAHijfwfBl4rBHFSY/edit?usp=sharing";
+    // আপনার গুগল শিট লিঙ্ক (লিঙ্কটি চেক করা হয়েছে)
+    const MY_SHEET_URL = "https://docs.google.com/spreadsheets/d/10VFHqozMCUa6GlVzraUAloLex-NAHijfwfBl4rBHFSY/preview";
 
     let savedNames = JSON.parse(localStorage.getItem('sagarFishNames')) || {
         'Arat': Array.from({length: 120}, (_, i) => `আড়ৎ ${i + 1}`),
@@ -102,4 +86,57 @@
     function verifyCode() {
         if(document.getElementById('twoFactorInput').value === TWO_FACTOR_CODE) {
             document.getElementById('step2').style.display = 'none';
-            document.getElementById('app-content').style.display = 'block
+            document.getElementById('app-content').style.display = 'block';
+        } else { alert("ভুল কোড!"); }
+    }
+
+    function showMenu(type) {
+        currentType = type;
+        document.getElementById('home-menu').style.display = 'none';
+        document.getElementById('sub-menu').style.display = 'block';
+        renderList(savedNames[type]);
+    }
+
+    function renderList(list) {
+        const container = document.getElementById('dynamic-buttons');
+        container.innerHTML = "";
+        list.forEach((name) => {
+            const row = document.createElement('div');
+            row.className = 'item-row';
+            const nameBtn = document.createElement('button');
+            nameBtn.className = 'item-name';
+            nameBtn.innerText = name;
+            // ক্লিক করলে তালি খাতা ওপেন হবে
+            nameBtn.onclick = () => openTaliKhata(name);
+            row.appendChild(nameBtn);
+            container.appendChild(row);
+        });
+    }
+
+    function openTaliKhata(name) {
+        document.getElementById('sub-menu').style.display = 'none';
+        document.getElementById('tali-khata-page').style.display = 'block';
+        document.getElementById('tali-title').innerText = name;
+        // শিট লোড করা হচ্ছে
+        document.getElementById('sheetFrame').src = MY_SHEET_URL;
+    }
+
+    function closeTali() {
+        document.getElementById('tali-khata-page').style.display = 'none';
+        document.getElementById('sub-menu').style.display = 'block';
+        document.getElementById('sheetFrame').src = ""; // মেমোরি ক্লিয়ার
+    }
+
+    function filterList() {
+        const term = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = savedNames[currentType].filter(n => n.toLowerCase().includes(term));
+        renderList(filtered);
+    }
+
+    function goHome() {
+        document.getElementById('home-menu').style.display = 'block';
+        document.getElementById('sub-menu').style.display = 'none';
+    }
+</script>
+</body>
+</html>
