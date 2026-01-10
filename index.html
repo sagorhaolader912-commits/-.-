@@ -8,42 +8,44 @@
         * { box-sizing: border-box; }
         body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background-color: #f4f6f9; font-family: Arial, sans-serif; }
         
-        /* হেডলাইন অনেক ছোট করা হয়েছে */
         .header { 
-            background: #1a73e8; color: white; padding: 8px; text-align: center; 
+            background: #1a73e8; color: white; padding: 10px; text-align: center; 
             font-size: 18px; font-weight: bold; position: relative; z-index: 100;
         }
 
         .back-btn { 
-            position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
-            background: #28a745; color: white; padding: 3px 8px; border-radius: 4px; 
-            display: none; cursor: pointer; font-size: 14px; font-weight: bold; border: none;
+            position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+            background: #28a745; color: white; padding: 3px 8px; border-radius: 5px; 
+            display: none; cursor: pointer; font-size: 14px; border: none;
         }
 
-        /* লগইন স্ক্রিন */
         #login-page { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .site-name { color: #1a73e8; font-size: 24px; font-weight: bold; margin-bottom: 15px; }
-        input { width: 75%; padding: 10px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 15px; }
+        .site-name { color: #1a73e8; font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+        input { width: 70%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; text-align: center; }
 
-        /* মেইন কন্টেন্ট */
         #main-app { display: none; height: 100%; flex-direction: column; }
-        .menu-area { padding: 12px; display: flex; flex-direction: column; gap: 10px; flex-grow: 1; }
         
-        /* একদম ছোট বক্স ডিজাইন */
-        .btn-container { background: white; padding: 8px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #eee; }
-        .btn { padding: 10px; border: none; border-radius: 6px; font-weight: bold; color: white; font-size: 15px; cursor: pointer; width: 100%; }
+        /* বাটনগুলোকে মাঝখানে আনার জন্য এলাইনমেন্ট */
+        .menu-area { padding: 15px; display: flex; flex-direction: column; align-items: center; gap: 10px; flex-grow: 1; }
+        
+        /* বক্সের চওড়া (Width) কমিয়ে ৮০% করা হয়েছে */
+        .btn-container { 
+            background: white; padding: 8px 12px; border-radius: 10px; 
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05); border: 1px solid #e0e4e8;
+            width: 80%; max-width: 320px; 
+        }
+        
+        .btn { padding: 10px; border: none; border-radius: 8px; font-weight: bold; color: white; font-size: 16px; cursor: pointer; width: 100%; }
         .btn-green { background: #28a745; }
         .btn-pink { background: #e91e63; }
-        .btn-gray { padding: 8px; background: #6c757d; font-size: 14px; margin-top: auto; }
+        .btn-gray { padding: 10px; background: #6c757d; font-size: 14px; margin-top: auto; margin-bottom: 15px; width: 80% !important; max-width: 320px; }
 
-        /* শর্টকাট হিসাব ছোট ফন্টে */
-        .shortcut-stats { display: flex; justify-content: space-between; margin-top: 6px; padding: 0 2px; font-size: 11px; font-weight: bold; color: #555; }
+        .shortcut-stats { display: flex; justify-content: space-between; margin-top: 6px; padding: 0 2px; font-size: 12px; font-weight: bold; color: #444; }
         .stat-joma { color: #2e7d32; } 
         .stat-jer { color: #c62828; }  
 
-        /* তালিকা */
-        .list-container { flex-grow: 1; overflow-y: auto; padding: 8px; display: none; }
-        .item-card { padding: 12px; background: #fff; border: 1px solid #eee; margin-bottom: 6px; border-radius: 8px; font-weight: bold; font-size: 13px; }
+        .list-container { flex-grow: 1; overflow-y: auto; padding: 10px; display: none; }
+        .item-card { padding: 12px; background: #fff; border: 1px solid #eee; margin-bottom: 6px; border-radius: 8px; font-weight: bold; font-size: 14px; text-align: center; }
 
         .sheet-container { flex-grow: 1; display: none; flex-direction: column; overflow: hidden; }
         iframe { width: 100%; height: 100%; border: none; }
@@ -54,7 +56,7 @@
     <div id="login-page">
         <div class="site-name">মেসার্স সাগর ফিস</div>
         <input type="password" id="passInput" placeholder="পাসওয়ার্ড">
-        <button class="btn btn-green" style="width: 75%;" onclick="handleLogin()">লগইন</button>
+        <button class="btn btn-green" style="width: 70%;" onclick="handleLogin()">লগইন</button>
     </div>
 
     <div id="main-app">
