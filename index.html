@@ -94,3 +94,77 @@
 
         <div id="list-screen" class="list-container">
             <div id="list-items"></div>
+        </div>
+
+        <div id="sheet-screen" class="sheet-container">
+            <iframe id="sheetFrame" src=""></iframe>
+        </div>
+    </div>
+
+<script>
+    const PASS = "sagar";
+    const CODE = "1234"; 
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/10VFHqozMCUa6GlVzraUAloLex-NAHijfwfBl4rBHFSY/edit?rm=minimal";
+    
+    let currentState = "home";
+
+    function checkPass() {
+        const val = document.getElementById('passInput').value;
+        if (val === PASS) {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+        } else { alert("ভুল পাসওয়ার্ড!"); }
+    }
+
+    function checkCode() {
+        const val = document.getElementById('codeInput').value;
+        if (val === CODE) {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+        } else { alert("ভুল সিকিউরিটি কোড!"); }
+    }
+
+    function showList(type) {
+        currentState = "list";
+        document.getElementById('home-screen').style.display = 'none';
+        document.getElementById('list-screen').style.display = 'block';
+        document.getElementById('backIcon').style.display = 'block';
+        document.getElementById('topTitle').innerText = (type === 'Arat' ? "আড়ৎ তালিকা" : "কোম্পানি তালিকা");
+        const container = document.getElementById('list-items');
+        container.innerHTML = "";
+        const total = (type === 'Arat' ? 120 : 20);
+        const prefix = (type === 'Arat' ? "আড়ৎ" : "কোম্পানি");
+        for (let i = 1; i <= total; i++) {
+            let div = document.createElement('div');
+            div.className = 'item-card';
+            div.innerText = prefix + " " + i;
+            div.onclick = function() { openSheet(prefix + " " + i); };
+            container.appendChild(div);
+        }
+    }
+
+    function openSheet(name) {
+        currentState = "sheet";
+        document.getElementById('list-screen').style.display = 'none';
+        document.getElementById('sheet-screen').style.display = 'flex';
+        document.getElementById('topTitle').innerText = name;
+        document.getElementById('sheetFrame').src = SHEET_URL;
+    }
+
+    function handleBack() {
+        if (currentState === "sheet") {
+            document.getElementById('sheet-screen').style.display = 'none';
+            document.getElementById('list-screen').style.display = 'block';
+            document.getElementById('sheetFrame').src = "";
+            currentState = "list";
+        } else if (currentState === "list") {
+            document.getElementById('list-screen').style.display = 'none';
+            document.getElementById('home-screen').style.display = 'flex';
+            document.getElementById('backIcon').style.display = 'none';
+            document.getElementById('topTitle').innerText = "মেসার্স সাগর ফিস";
+            currentState = "home";
+        }
+    }
+</script>
+</body>
+</html>
