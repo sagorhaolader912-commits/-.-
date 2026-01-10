@@ -9,19 +9,16 @@
         .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); min-height: 90vh; }
         .header { background: #1a73e8; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
         
-        /* লগইন ডিজাইন */
         .login-box { padding: 30px; }
         input { width: 90%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; text-align: center; }
         .btn-action { width: 95%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
         #step2, #app-content { display: none; }
 
-        /* মেনু ডিজাইন */
         .btn-main { padding: 18px; width: 95%; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; margin: 8px; color: white; background: #28a745; font-size: 16px; }
         
-        /* আড়ৎ ও কোম্পানি লিস্ট ডিজাইন - উভয়ই এখন Row আকারে */
         .btn-list { display: flex; flex-direction: column; gap: 8px; max-height: 500px; overflow-y: auto; padding: 5px; margin-top: 15px; }
         
-        .item-row { display: flex; align-items: center; background: #ffffff; border-radius: 10px; border: 1px solid #dfe1e5; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: 0.2s; }
+        .item-row { display: flex; align-items: center; background: #ffffff; border-radius: 10px; border: 1px solid #dfe1e5; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .item-row:hover { background: #f8f9fa; border-color: #1a73e8; }
         
         .item-name { flex-grow: 1; padding: 15px; border: none; background: none; font-weight: 600; text-align: left; cursor: pointer; font-size: 15px; color: #3c4043; }
@@ -30,127 +27,4 @@
         .three-dot:hover { color: #1a73e8; background: #e8f0fe; border-radius: 0 10px 10px 0; }
 
         iframe { width: 100%; height: 500px; border-radius: 10px; margin-top: 20px; display: none; border: 1px solid #ddd; }
-        .back-btn { background: #5f6368 !important; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div id="step1" class="login-box">
-        <div class="header"><h3>মেসার্স সাগর ফিস</h3></div>
-        <h4>পাসওয়ার্ড দিন</h4>
-        <input type="password" id="passInput" placeholder="Password">
-        <button class="btn-action" onclick="checkPassword()">পরবর্তী ধাপ</button>
-    </div>
-
-    <div id="step2" class="login-box">
-        <div class="header"><h3>সিকিউরিটি কোড</h3></div>
-        <input type="number" id="twoFactorInput" placeholder="৬ ডিজিট কোড">
-        <button class="btn-action" onclick="verifyCode()">লগইন করুন</button>
-    </div>
-
-    <div id="app-content">
-        <div class="header">
-            <h1 style="margin:0; font-size: 24px;">মেসার্স সাগর ফিস</h1>
-        </div>
-        
-        <div id="home-menu">
-            <button class="btn-main" onclick="showMenu('Arat')">আড়ৎ এর হিসাব (১২০)</button>
-            <button class="btn-main" style="background:#e91e63" onclick="showMenu('Company')">বিক্রয়ের হিসাব (২০)</button>
-            <button class="btn-main" style="background:#f39c12; font-size:14px;" onclick="resetNames()">নামগুলো আগের মতো করুন</button>
-            <button class="btn-main" style="background:#6c757d; font-size:14px;" onclick="location.reload()">লগ আউট</button>
-        </div>
-        
-        <div id="sub-menu" style="display:none;">
-            <h3 id="menu-title" style="color: #1a73e8;">তালিকা</h3>
-            <div id="dynamic-buttons" class="btn-list"></div>
-            <button class="btn-main back-btn" onclick="goHome()">← প্রধান মেনুতে ফিরুন</button>
-        </div>
-        
-        <iframe id="sheetFrame" src=""></iframe>
-    </div>
-</div>
-
-<script>
-    const MAIN_PASSWORD = "sagar"; 
-    const TWO_FACTOR_CODE = "998877"; 
-    const mySheetLink = "https://docs.google.com/spreadsheets/d/1BlbOrJsve7AjU9Yn9qze8k5qNcVeaKqI_HXXG42RKE/edit?usp=sharing";
-
-    function checkPassword() {
-        if(document.getElementById('passInput').value === MAIN_PASSWORD) {
-            document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').style.display = 'block';
-        } else { alert("ভুল পাসওয়ার্ড!"); }
-    }
-
-    function verifyCode() {
-        if(document.getElementById('twoFactorInput').value === TWO_FACTOR_CODE) {
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('app-content').style.display = 'block';
-        } else { alert("ভুল কোড!"); }
-    }
-
-    // নাম সেভ রাখার ব্যবস্থা
-    let savedNames = JSON.parse(localStorage.getItem('sagarFishNames')) || {
-        'Arat': Array.from({length: 120}, (_, i) => `আড়ৎ ${i + 1}`),
-        'Company': Array.from({length: 20}, (_, i) => `কোম্পানি ${i + 1}`)
-    };
-
-    function showMenu(type) {
-        document.getElementById('home-menu').style.display = 'none';
-        document.getElementById('sub-menu').style.display = 'block';
-        document.getElementById('menu-title').innerText = type === 'Arat' ? "আড়ৎ নির্বাচন করুন (১২০):" : "কোম্পানি নির্বাচন করুন (২০):";
-        renderButtons(type);
-    }
-
-    function renderButtons(type) {
-        const container = document.getElementById('dynamic-buttons');
-        container.innerHTML = ""; 
-        savedNames[type].forEach((name, index) => {
-            const row = document.createElement('div');
-            row.className = 'item-row';
-
-            // নাম বাটন (এক ক্লিকে গুগল শিট খুলবে)
-            const nameBtn = document.createElement('button');
-            nameBtn.className = 'item-name';
-            nameBtn.innerText = name;
-            nameBtn.onclick = () => {
-                const frame = document.getElementById('sheetFrame');
-                frame.style.display = 'block';
-                frame.src = mySheetLink + "&rm=minimal";
-            };
-
-            // থ্রি-ডট বাটন (ক্লিক করলে নাম পরিবর্তন হবে)
-            const dotBtn = document.createElement('button');
-            dotBtn.className = 'three-dot';
-            dotBtn.innerHTML = "⋮";
-            dotBtn.onclick = () => {
-                let newName = prompt("নতুন নাম লিখুন:", name);
-                if (newName && newName.trim() !== "") {
-                    savedNames[type][index] = newName;
-                    localStorage.setItem('sagarFishNames', JSON.stringify(savedNames));
-                    renderButtons(type);
-                }
-            };
-
-            row.appendChild(nameBtn);
-            row.appendChild(dotBtn);
-            container.appendChild(row);
-        });
-    }
-
-    function resetNames() {
-        if(confirm("আপনি কি সব নাম মুছে আগের মতো করতে চান?")) {
-            localStorage.removeItem('sagarFishNames');
-            location.reload();
-        }
-    }
-
-    function goHome() {
-        document.getElementById('home-menu').style.display = 'block';
-        document.getElementById('sub-menu').style.display = 'none';
-        document.getElementById('sheetFrame').style.display = 'none';
-    }
-</script>
-</body>
-</html>
+        .back-btn { background: #5f6368
