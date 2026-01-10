@@ -8,15 +8,17 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { 
             margin: 0; padding: 0; height: 100vh; background: #f4f6f9; 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            overflow-x: hidden; /* ডানে বামে নড়াচড়া বন্ধ */
+            font-family: Arial, sans-serif; overflow-x: hidden;
         }
         
-        /* লগইন এরিয়া */
+        /* লগইন স্ক্রিন */
         #login-area { position: fixed; inset: 0; background: white; z-index: 1000; display: flex; align-items: center; justify-content: center; }
-        .box { width: 90%; max-width: 300px; padding: 30px; border: 1px solid #ddd; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        input.login-input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; text-align: center; font-size: 16px; outline: none; }
-        .go-btn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .box { width: 85%; max-width: 300px; padding: 25px; border: 1px solid #ddd; border-radius: 15px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .login-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; text-align: center; font-size: 16px; display: block; outline: none; }
+        
+        .show-pass-wrap { display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 15px; font-size: 14px; color: #555; cursor: pointer; }
+        
+        .go-btn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; }
 
         /* মেইন অ্যাপ */
         #main-app { display: none; flex-direction: column; height: 100vh; }
@@ -29,16 +31,14 @@
         .btn-green { background: #28a745; }
         .btn-pink { background: #e91e63; }
 
-        /* সার্চ ও লিস্ট */
         #search-container { padding: 10px; background: #fff; border-bottom: 1px solid #eee; display: none; }
-        #globalSearch { width: 100%; padding: 12px; border: 2px solid #1a73e8; border-radius: 8px; font-size: 16px; outline: none; }
+        #globalSearch { width: 100%; padding: 12px; border: 2px solid #1a73e8; border-radius: 8px; font-size: 16px; }
         
         #list-screen { display: none; overflow-y: auto; background: #fff; flex-grow: 1; }
-        .list-item { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .item-text { font-weight: bold; color: #333; font-family: Arial; font-size: 16px; }
+        .list-item { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; width: 100%; cursor: pointer; }
+        .item-text { font-weight: bold; color: #333; font-size: 16px; }
 
-        /* শিট ভিউ */
-        #sheet-screen { display: none; flex-grow: 1; -webkit-overflow-scrolling: touch; }
+        #sheet-screen { display: none; flex-grow: 1; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
@@ -47,15 +47,20 @@
     <div id="login-area">
         <div class="box">
             <h2 style="color:#1a73e8; margin-bottom:20px;">সাগর ফিস</h2>
-            <input type="text" id="pass" class="login-input" placeholder="পাসওয়ার্ড (sagar)">
-            <input type="number" id="code" class="login-input" placeholder="কোড (998877)">
-            <button class="go-btn" onclick="checkNow()">লগইন</button>
+            <input type="password" id="userInputPass" class="login-input" placeholder="পাসওয়ার্ড (sagarfish)">
+            
+            <label class="show-pass-wrap">
+                <input type="checkbox" onclick="togglePass()"> Show Password
+            </label>
+
+            <input type="number" id="userInputCode" class="login-input" placeholder="কোড (4321)">
+            <button class="go-btn" onclick="checkLogin()">লগইন</button>
         </div>
     </div>
 
     <div id="main-app">
         <div class="header">
-            <button id="backIcon" class="back-btn" onclick="handleBack()">← back</button>
+            <button id="backIcon" class="back-btn" onclick="handleBack()">← ফিরে যান</button>
             <span id="topTitle">মেসার্স সাগর ফিস</span>
         </div>
 
@@ -69,7 +74,7 @@
         </div>
 
         <div id="search-container">
-            <input type="text" id="globalSearch" placeholder="তারিখ লিখুন (উদা: 10/1/2026)" onkeyup="filterItems()">
+            <input type="text" id="globalSearch" placeholder="তারিখ দিয়ে খুঁজুন (10/1/2026)" onkeyup="filterItems()">
         </div>
 
         <div id="list-screen"></div>
@@ -80,20 +85,35 @@
     </div>
 
 <script>
-    const P = "sagorfish", C = "321";
-    const sheetURL = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/preview?rm=minimal";
+    // আপনার নতুন পাসওয়ার্ড ও কোড
+    const VALID_PASS = "sagarfish";
+    const VALID_CODE = "4321";
+    const SHEET_LINK = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/preview?rm=minimal";
 
-    function checkNow() {
-        let uPass = document.getElementById('pass').value.toLowerCase();
-        let uCode = document.getElementById('code').value;
-        if (uPass === P && uCode === C) {
+    // পাসওয়ার্ড দেখানো বা লুকানোর ফাংশন
+    function togglePass() {
+        let x = document.getElementById("userInputPass");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+
+    function checkLogin() {
+        let p = document.getElementById('userInputPass').value;
+        let c = document.getElementById('userInputCode').value;
+
+        if (p === VALID_PASS && c === VALID_CODE) {
             document.getElementById('login-area').style.display = 'none';
             document.getElementById('main-app').style.display = 'flex';
-        } else { alert("ভুল পাসওয়ার্ড বা কোড!"); }
+        } else {
+            alert("ভুল পাসওয়ার্ড বা কোড! আবার চেষ্টা করুন।");
+        }
     }
 
     function showYearList(type) {
-        window.currentType = type;
+        window.selectedType = type;
         document.getElementById('home-screen').style.display = 'none';
         document.getElementById('search-container').style.display = 'block';
         document.getElementById('list-screen').style.display = 'block';
@@ -112,8 +132,7 @@
     }
 
     function showDateList(year) {
-        window.currentYear = year;
-        document.getElementById('topTitle').innerText = window.currentType + " - " + year;
+        document.getElementById('topTitle').innerText = window.selectedType + " - " + year;
         let container = document.getElementById('list-screen');
         container.innerHTML = "";
         let date = new Date(year, 0, 1);
@@ -133,7 +152,7 @@
         document.getElementById('list-screen').style.display = 'none';
         document.getElementById('sheet-screen').style.display = 'block';
         document.getElementById('topTitle').innerText = dateTitle;
-        document.getElementById('sheetFrame').src = sheetURL;
+        document.getElementById('sheetFrame').src = SHEET_LINK + "&t=" + new Date().getTime();
     }
 
     function filterItems() {
@@ -150,4 +169,14 @@
             document.getElementById('sheet-screen').style.display = 'none';
             document.getElementById('search-container').style.display = 'block';
             document.getElementById('list-screen').style.display = 'block';
-        } else if (document.getElementById
+        } else if (document.getElementById('list-screen').style.display === 'block') {
+            document.getElementById('list-screen').style.display = 'none';
+            document.getElementById('search-container').style.display = 'none';
+            document.getElementById('home-screen').style.display = 'flex';
+            document.getElementById('backIcon').style.display = 'none';
+            document.getElementById('topTitle').innerText = "মেসার্স সাগর ফিস";
+        }
+    }
+</script>
+</body>
+</html>
