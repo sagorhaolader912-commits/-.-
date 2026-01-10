@@ -5,20 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>মেসার্স সাগর ফিস</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; text-align: center; background-color: #eef2f3; margin: 0; padding: 20px; }
-        .login-box { max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', Arial, sans-serif; text-align: center; background-color: #eef2f3; margin: 0; padding: 10px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .header { background: #1a73e8; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
-        input { width: 90%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; text-align: center; }
-        .btn-action { width: 95%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        #step2, #app-content { display: none; }
-        .error { color: red; font-weight: bold; display: none; margin-top: 10px; }
         
-        /* অ্যাপ কন্টেন্ট */
+        /* লগইন স্টাইল */
+        .login-box { padding: 30px; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; text-align: center; }
+        .btn-action { width: 95%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        #step2, #app-content { display: none; }
+
+        /* অ্যাপ স্টাইল */
         .btn-main { padding: 18px; width: 95%; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; margin: 8px; color: white; background: #28a745; }
-        .btn-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-height: 400px; overflow-y: auto; padding: 10px; border: 1px solid #eee; border-radius: 10px; }
-        .btn-item { padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #e3f2fd; font-weight: bold; cursor: pointer; }
+        .btn-list { display: grid; grid-template-columns: 1fr; gap: 8px; max-height: 450px; overflow-y: auto; padding: 10px; border: 1px solid #eee; border-radius: 10px; }
+        
+        /* বাটন ও থ্রি-ডট কন্টেইনার */
+        .item-row { display: flex; align-items: center; background: #e3f2fd; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 5px; overflow: hidden; }
+        .item-name { flex-grow: 1; padding: 12px; border: none; background: none; font-weight: bold; text-align: left; cursor: pointer; font-size: 15px; }
+        .three-dot { padding: 10px 15px; background: none; border: none; border-left: 1px solid #ccc; cursor: pointer; font-size: 18px; font-weight: bold; color: #555; }
+        .three-dot:hover { background: #d1e9ff; }
+
         iframe { width: 100%; height: 500px; border-radius: 10px; margin-top: 20px; display: none; border: 1px solid #ddd; }
-        .info-text { font-size: 12px; color: #666; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -26,18 +33,14 @@
 <div class="container">
     <div id="step1" class="login-box">
         <div class="header"><h3>মেসার্স সাগর ফিস</h3></div>
-        <h4>পাসওয়ার্ড দিন</h4>
         <input type="password" id="passInput" placeholder="পাসওয়ার্ড">
         <button class="btn-action" onclick="checkPassword()">পরবর্তী ধাপ</button>
-        <p id="err1" class="error">ভুল পাসওয়ার্ড!</p>
     </div>
 
     <div id="step2" class="login-box">
         <div class="header"><h3>নিরাপত্তা যাচাই</h3></div>
-        <p>ভেরিফিকেশন কোডটি দিন</p>
         <input type="number" id="twoFactorInput" placeholder="৬ ডিজিট কোড">
         <button class="btn-action" onclick="verifyCode()">প্রবেশ করুন</button>
-        <p id="err2" class="error">ভুল কোড!</p>
     </div>
 
     <div id="app-content">
@@ -45,15 +48,14 @@
         <div id="home-menu">
             <button class="btn-main" onclick="showMenu('Arat')">আড়ৎ এর হিসাব (১২০)</button>
             <button class="btn-main" style="background:#e91e63" onclick="showMenu('Company')">বিক্রয়ের হিসাব (২০)</button>
-            <button class="btn-main" style="background:#f39c12" onclick="resetNames()">নামগুলো রিসেট করুন</button>
-            <button class="btn-main" style="background:#6c757d" onclick="location.reload()">লগ আউট</button>
+            <button class="btn-main" style="background:#f39c12; font-size:14px;" onclick="resetNames()">সব নাম রিসেট করুন</button>
+            <button class="btn-main" style="background:#6c757d; font-size:14px;" onclick="location.reload()">লগ আউট</button>
         </div>
         
         <div id="sub-menu" style="display:none;">
             <h3 id="menu-title">তালিকা</h3>
-            <p class="info-text">নাম বদলাতে বাটনের ওপর চেপে ধরে রাখুন</p>
             <div id="dynamic-buttons" class="btn-list"></div>
-            <button class="btn-action" style="background:#6c757d" onclick="goHome()">← পেছনে যান</button>
+            <button class="btn-action" style="background:#6c757d; margin-top:15px;" onclick="goHome()">← পেছনে যান</button>
         </div>
         <iframe id="sheetFrame" src=""></iframe>
     </div>
@@ -68,14 +70,14 @@
         if(document.getElementById('passInput').value === MAIN_PASSWORD) {
             document.getElementById('step1').style.display = 'none';
             document.getElementById('step2').style.display = 'block';
-        } else { document.getElementById('err1').style.display = 'block'; }
+        } else { alert("ভুল পাসওয়ার্ড!"); }
     }
 
     function verifyCode() {
         if(document.getElementById('twoFactorInput').value === TWO_FACTOR_CODE) {
             document.getElementById('step2').style.display = 'none';
             document.getElementById('app-content').style.display = 'block';
-        } else { document.getElementById('err2').style.display = 'block'; }
+        } else { alert("ভুল কোড!"); }
     }
 
     let savedNames = JSON.parse(localStorage.getItem('sagarFishNames')) || {
@@ -94,29 +96,33 @@
         const container = document.getElementById('dynamic-buttons');
         container.innerHTML = ""; 
         savedNames[type].forEach((name, index) => {
-            const btn = document.createElement('button');
-            btn.className = 'btn-item';
-            btn.innerText = name;
-            
-            btn.onclick = () => {
+            const row = document.createElement('div');
+            row.className = 'item-row';
+
+            const nameBtn = document.createElement('button');
+            nameBtn.className = 'item-name';
+            nameBtn.innerText = name;
+            nameBtn.onclick = () => {
                 const frame = document.getElementById('sheetFrame');
                 frame.style.display = 'block';
                 frame.src = mySheetLink + "&rm=minimal";
             };
 
-            let timer;
-            btn.onmousedown = btn.ontouchstart = () => {
-                timer = setTimeout(() => {
-                    let newName = prompt("নতুন নাম লিখুন:", name);
-                    if (newName) {
-                        savedNames[type][index] = newName;
-                        localStorage.setItem('sagarFishNames', JSON.stringify(savedNames));
-                        renderButtons(type);
-                    }
-                }, 800);
+            const dotBtn = document.createElement('button');
+            dotBtn.className = 'three-dot';
+            dotBtn.innerHTML = "⋮";
+            dotBtn.onclick = () => {
+                let newName = prompt("নতুন নাম লিখুন:", name);
+                if (newName && newName.trim() !== "") {
+                    savedNames[type][index] = newName;
+                    localStorage.setItem('sagarFishNames', JSON.stringify(savedNames));
+                    renderButtons(type);
+                }
             };
-            btn.onmouseup = btn.onmouseleave = btn.ontouchend = () => clearTimeout(timer);
-            container.appendChild(btn);
+
+            row.appendChild(nameBtn);
+            row.appendChild(dotBtn);
+            container.appendChild(row);
         });
     }
 
