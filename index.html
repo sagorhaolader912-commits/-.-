@@ -8,10 +8,12 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { margin: 0; padding: 0; height: 100vh; background: #f4f6f9; font-family: Arial, sans-serif; overflow: hidden; }
         
-        /* লগইন স্ক্রিন */
+        /* লগইন এরিয়া */
         #login-area { position: fixed; inset: 0; background: white; z-index: 1000; display: flex; align-items: center; justify-content: center; }
-        .box { width: 85%; max-width: 300px; padding: 25px; border: 1px solid #ddd; border-radius: 15px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .box { width: 85%; max-width: 320px; padding: 25px; border: 1px solid #ddd; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .login-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; text-align: center; font-size: 16px; display: block; outline: none; }
+        
+        .show-pass-label { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; font-size: 14px; color: #555; cursor: pointer; user-select: none; }
         .go-btn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; }
 
         /* মেইন অ্যাপ */
@@ -31,7 +33,7 @@
         #list-screen { display: none; background: #fff; }
         .list-item { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; width: 100%; cursor: pointer; }
         
-        /* এডিট করার জন্য বড় ফ্রেম */
+        /* এডিট শিট ফ্রেম */
         #sheet-screen { display: none; flex-grow: 1; position: relative; width: 100%; height: 100%; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
@@ -40,110 +42,20 @@
 
     <div id="login-area">
         <div class="box">
-            <h2 style="color:#1a73e8; margin-bottom:20px;">সাগর ফিস</h2>
-            <input type="password" id="p" class="login-input" placeholder="পাসওয়ার্ড">
-            <input type="password" id="c" class="login-input" placeholder="কোড">
-            <button class="go-btn" onclick="login()">লগইন</button>
+            <h2 style="color:#1a73e8; margin-bottom:20px;">মেসার্স সাগর ফিস</h2>
+            
+            <input type="password" id="passIn" class="login-input" placeholder="পাসওয়ার্ড লিখুন">
+            <input type="password" id="codeIn" class="login-input" placeholder="কোড লিখুন">
+            
+            <label class="show-pass-label">
+                <input type="checkbox" onclick="togglePassView()"> Show Password
+            </label>
+
+            <button class="go-btn" onclick="checkFinalLogin()">লগইন করুন</button>
+            <p style="font-size: 10px; color: #aaa; margin-top: 15px;">Final Secure Version 7.0</p>
         </div>
     </div>
 
     <div id="main-app">
         <div class="header">
-            <button id="backIcon" class="back-btn" onclick="handleBack()">← back</button>
-            <span id="topTitle">মেসার্স সাগর ফিস</span>
-        </div>
-
-        <div id="home-screen" class="menu-list">
-            <div class="card"><button class="btn btn-green" onclick="showYearList('আড়ৎ')">আড়ৎ এর হিসাব</button></div>
-            <div class="card"><button class="btn btn-pink" onclick="showYearList('বিক্রয়')">বিক্রয়ের হিসাব</button></div>
-        </div>
-
-        <div id="search-container">
-            <input type="text" id="globalSearch" placeholder="খুঁজুন (উদা: 10/1/2026)" onkeyup="filterItems()">
-        </div>
-
-        <div id="list-screen"></div>
-
-        <div id="sheet-screen">
-            <iframe id="sheetFrame" src=""></iframe>
-        </div>
-    </div>
-
-<script>
-    // আপনার গুগল শিট এডিট করার মূল লিঙ্ক
-    const EDITABLE_URL = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/edit?widget=true&headers=false";
-
-    function login() {
-        var p = document.getElementById("p").value;
-        var c = document.getElementById("c").value;
-        if (p === "sagarfish" && c === "4321") {
-            document.getElementById('login-area').style.display = 'none';
-            document.getElementById('main-app').style.display = 'flex';
-        } else { alert("ভুল পাসওয়ার্ড বা কোড!"); }
-    }
-
-    function showYearList(type) {
-        window.currentType = type;
-        document.getElementById('home-screen').style.display = 'none';
-        document.getElementById('search-container').style.display = 'block';
-        document.getElementById('list-screen').style.display = 'flex';
-        document.getElementById('backIcon').style.display = 'block';
-        document.getElementById('topTitle').innerText = type + " - বছর";
-
-        let container = document.getElementById('list-screen');
-        container.innerHTML = "";
-        for (let year = 2026; year <= 2035; year++) {
-            let div = document.createElement('div');
-            div.className = 'list-item';
-            div.innerHTML = `<b>Year: ${year}</b> ❯`;
-            div.onclick = () => showDateList(year);
-            container.appendChild(div);
-        }
-    }
-
-    function showDateList(year) {
-        document.getElementById('topTitle').innerText = window.currentType + " - " + year;
-        let container = document.getElementById('list-screen');
-        container.innerHTML = "";
-        let date = new Date(year, 0, 1);
-        while (date.getFullYear() === year) {
-            let dStr = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-            let div = document.createElement('div');
-            div.className = 'list-item';
-            div.innerHTML = `<span>${dStr}</span> ❯`;
-            div.onclick = () => {
-                document.getElementById('search-container').style.display = 'none';
-                document.getElementById('list-screen').style.display = 'none';
-                document.getElementById('sheet-screen').style.display = 'block';
-                document.getElementById('topTitle').innerText = dStr;
-                document.getElementById('sheetFrame').src = EDITABLE_URL;
-            };
-            container.appendChild(div);
-            date.setDate(date.getDate() + 1);
-        }
-    }
-
-    function filterItems() {
-        let input = document.getElementById('globalSearch').value.toLowerCase();
-        let items = document.getElementsByClassName('list-item');
-        for (let item of items) {
-            item.style.display = item.innerText.toLowerCase().includes(input) ? "flex" : "none";
-        }
-    }
-
-    function handleBack() {
-        if (document.getElementById('sheet-screen').style.display === 'block') {
-            document.getElementById('sheet-screen').style.display = 'none';
-            document.getElementById('search-container').style.display = 'block';
-            document.getElementById('list-screen').style.display = 'flex';
-        } else if (document.getElementById('list-screen').style.display === 'flex') {
-            document.getElementById('list-screen').style.display = 'none';
-            document.getElementById('search-container').style.display = 'none';
-            document.getElementById('home-screen').style.display = 'flex';
-            document.getElementById('backIcon').style.display = 'none';
-            document.getElementById('topTitle').innerText = "মেসার্স সাগর ফিস";
-        }
-    }
-</script>
-</body>
-</html>
+            <button id="backIcon" class="back-btn" onclick="handleBack()">← back</
