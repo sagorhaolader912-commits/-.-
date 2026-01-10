@@ -5,160 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>মেসার্স সাগর ফিস</title>
     <style>
-        html, body { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background-color: #f0f2f5; font-family: 'Segoe UI', Arial, sans-serif; }
-        .container { height: 100%; width: 100%; max-width: 800px; margin: auto; background: white; display: flex; flex-direction: column; position: relative; }
-
-        /* আগের সেই নীল হেডলাইন ডিজাইন */
-        .header-container {
-            background: #1a73e8;
-            color: white;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            flex-shrink: 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        /* সবুজ ব্যাক বাটন - বাম কোণায় */
-        .back-icon {
-            position: absolute;
-            left: 10px;
-            background: #28a745;
-            color: white;
-            width: 38px;
-            height: 38px;
-            border-radius: 8px;
-            display: none; /* জাভাস্ক্রিপ্ট দিয়ে দেখাবে */
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            z-index: 10;
-        }
-
-        .main-title { font-size: 22px; font-weight: bold; }
-
-        /* মেনু এবং কন্টেন্ট এরিয়া */
-        #app-content { display: none; flex-direction: column; height: 100%; width: 100%; }
-        #home-menu, #sub-menu, #tali-khata-page { display: none; flex-direction: column; height: 100%; width: 100%; }
-
-        .menu-list { display: flex; flex-direction: column; gap: 12px; padding: 20px; flex-grow: 1; justify-content: flex-start; }
+        * { box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background-color: #f0f2f5; font-family: 'Segoe UI', Arial, sans-serif; }
         
-        .btn-main { padding: 18px; width: 100%; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; color: white; background: #28a745; font-size: 16px; box-shadow: 0 3px 5px rgba(0,0,0,0.1); }
+        .container { height: 100%; width: 100%; max-width: 600px; margin: auto; background: white; display: flex; flex-direction: column; position: relative; }
 
-        /* খাতা স্ক্রল এবং হেডলাইন সেটিংস */
-        .scroll-wrapper { flex-grow: 1; overflow-x: auto; overflow-y: hidden; display: flex; flex-direction: column; }
-        .fixed-header-row { display: flex; background: #0d47a1; color: white; font-size: 13px; font-weight: bold; min-width: 600px; padding: 12px 0; flex-shrink: 0; }
-        .fixed-header-row div { width: 100px; text-align: center; border-right: 1px solid rgba(255,255,255,0.1); }
-        .tali-table-container { flex-grow: 1; min-width: 600px; height: 100%; }
-        iframe { width: 100%; height: 100%; border: none; }
+        /* হেডলাইন ডিজাইন - আপনার প্রিয় নীল কালার */
+        .header { 
+            background: #1a73e8; color: white; padding: 18px; text-align: center; 
+            font-size: 24px; font-weight: bold; position: relative; flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
 
-        .item-list { overflow-y: auto; flex-grow: 1; padding: 15px; }
-        .item-row { padding: 18px; background: #f8f9fa; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 12px; font-weight: bold; text-align: left; color: #333; }
+        /* সবুজ ব্যাক বাটন - বাম কোণায় পারমানেন্ট */
+        .back-btn { 
+            position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+            background: #28a745; color: white; width: 40px; height: 35px; 
+            border-radius: 6px; display: none; align-items: center; justify-content: center;
+            font-size: 20px; font-weight: bold; cursor: pointer; border: none;
+        }
 
         /* লগইন স্ক্রিন */
-        #login-screen { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        input { width: 80%; padding: 15px; margin: 20px 0; border: 2px solid #ddd; border-radius: 12px; text-align: center; font-size: 16px; }
+        #login-page { position: absolute; inset: 0; background: white; z-index: 100; display: flex; flex-direction: column; align-items: center; padding-top: 100px; }
+        input { width: 80%; padding: 15px; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; text-align: center; }
+
+        /* মেনু ও তালিকা */
+        #main-app { display: none; flex-direction: column; height: 100%; width: 100%; }
+        .menu-area { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .btn { padding: 18px; width: 100%; border: none; border-radius: 12px; font-weight: bold; color: white; font-size: 16px; cursor: pointer; }
+        .btn-green { background: #28a745; }
+        .btn-pink { background: #e91e63; }
+        .btn-gray { background: #6c757d; }
+
+        /* খাতা এরিয়া */
+        .list-container { flex-grow: 1; overflow-y: auto; padding: 15px; }
+        .item-card { padding: 15px; background: #f8f9fa; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        
+        .sheet-wrapper { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .labels { display: flex; background: #0d47a1; color: white; font-size: 12px; min-width: 600px; padding: 10px 0; }
+        .labels div { width: 100px; text-align: center; border-right: 1px solid rgba(255,255,255,0.1); }
+        .iframe-container { flex-grow: 1; overflow: auto; min-width: 600px; }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="login-screen">
-        <div class="header-container" style="width: 100%; position: absolute; top: 0; box-sizing: border-box;">
-            <div class="main-title">মেসার্স সাগর ফিস</div>
-        </div>
-        <input type="password" id="passInput" placeholder="সিকিউরিটি পাসওয়ার্ড">
-        <button class="btn-main" style="width: 80%; background: #1a73e8;" onclick="checkPassword()">লগইন করুন</button>
+    <div id="login-page">
+        <div style="font-size: 26px; font-weight: bold; color: #1a73e8; margin-bottom: 30px;">মেসার্স সাগর ফিস</div>
+        <input type="password" id="pass" placeholder="পাসওয়ার্ড দিন">
+        <button class="btn btn-green" style="width: 80%;" onclick="login()">লগইন</button>
     </div>
 
-    <div id="app-header" class="header-container" style="display: none;">
-        <div id="backBtn" class="back-icon" onclick="goBack()">←</div>
-        <div id="dynamic-title" class="main-title">মেসার্স সাগর ফিস</div>
-    </div>
-
-    <div id="app-content">
-        <div id="home-menu">
-            <div class="menu-list">
-                <button class="btn-main" onclick="showMenu('Arat')">আড়ৎ এর হিসাব</button>
-                <button class="btn-main" style="background:#e91e63" onclick="showMenu('Company')">বিক্রয়ের হিসাব</button>
-                <button class="btn-main" style="background:#6c757d; margin-top: 20px;" onclick="location.reload()">লগ আউট</button>
-            </div>
+    <div id="main-app">
+        <div class="header">
+            <div id="backIcon" class="back-btn" onclick="goBack()">←</div>
+            <span id="titleText">মেসার্স সাগর ফিস</span>
         </div>
 
-        <div id="sub-menu">
-            <div id="dynamic-buttons" class="item-list"></div>
+        <div id="home-screen" class="menu-area">
+            <button class="btn btn-green" onclick="showList('Arat')">আড়ৎ এর হিসাব</button>
+            <button class="btn btn-pink" onclick="showList('Company')">বিক্রয়ের হিসাব</button>
+            <button class="btn btn-gray" style="margin-top: 20px;" onclick="location.reload()">লগ আউট</button>
         </div>
 
-        <div id="tali-khata-page">
-            <div class="scroll-wrapper">
-                <div class="fixed-header-row">
-                    <div>তারিখ</div><div>ওজন</div><div>দর</div><div>মোট টাকা</div><div>জমা</div><div>জের</div>
-                </div>
-                <div class="tali-table-container">
-                    <iframe id="sheetFrame" src=""></iframe>
-                </div>
-            </div>
+        <div id="list-screen" class="list-container" style="display: none;">
+            <div id="list-items"></div>
         </div>
-    </div>
-</div>
 
-<script>
-    const MAIN_PASSWORD = "sagar"; 
-    const MY_SHEET_URL = "https://docs.google.com/spreadsheets/d/10VFHqozMCUa6GlVzraUAloLex-NAHijfwfBl4rBHFSY/edit?rm=minimal";
-    let currentLevel = 'home';
-
-    function checkPassword() {
-        const inputVal = document.getElementById('passInput').value;
-        if(inputVal === MAIN_PASSWORD) {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('app-header').style.display = 'flex';
-            document.getElementById('app-content').style.display = 'flex';
-            showHome();
-        } else { 
-            alert("ভুল পাসওয়ার্ড!"); 
-        }
-    }
-
-    function showHome() {
-        currentLevel = 'home';
-        document.getElementById('home-menu').style.display = 'flex';
-        document.getElementById('sub-menu').style.display = 'none';
-        document.getElementById('tali-khata-page').style.display = 'none';
-        document.getElementById('backBtn').style.display = 'none'; 
-        document.getElementById('dynamic-title').innerText = "মেসার্স সাগর ফিস";
-    }
-
-    function showMenu(type) {
-        currentLevel = 'list';
-        document.getElementById('home-menu').style.display = 'none';
-        document.getElementById('sub-menu').style.display = 'flex';
-        document.getElementById('backBtn').style.display = 'flex'; 
-        document.getElementById('dynamic-title').innerText = type === 'Arat' ? "আড়ৎ তালিকা" : "কোম্পানি তালিকা";
-        
-        const container = document.getElementById('dynamic-buttons');
-        container.innerHTML = "";
-        const names = type === 'Arat' ? Array.from({length: 120}, (_, i) => `আড়ৎ ${i + 1}`) : Array.from({length: 20}, (_, i) => `কোম্পানি ${i + 1}`);
-        
-        names.forEach((name) => {
-            const row = document.createElement('div');
-            row.className = 'item-row';
-            row.innerText = name;
-            row.onclick = () => openTaliKhata(name);
-            container.appendChild(row);
-        });
-    }
-
-    function openTaliKhata(name) {
-        currentLevel = 'khata';
-        document.getElementById('sub-menu').style.display = 'none';
-        document.getElementById('tali-khata-page').style.display = 'flex';
-        document.getElementById('dynamic-title').innerText = name;
-        document.getElementById('sheetFrame').src = MY_SHEET_URL;
-    }
-
-    function goBack() {
+        <div id="sheet-screen" class="sheet-wrapper" style="display: none;">
+            <div style="overflow-x: auto; flex-grow: 1; display: flex; flex-direction: column;">
+                <div class="labels">
+                    <div>তারিখ</div><div>ও
