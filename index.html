@@ -7,47 +7,24 @@
     <style>
         * { box-sizing: border-box; }
         body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background-color: #f4f6f9; font-family: Arial, sans-serif; }
-        
-        /* Chhoto Login Design */
-        #login-page { 
-            position: fixed; inset: 0; background: #fff; z-index: 9999; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-        }
-        .login-box { 
-            width: 250px; padding: 20px; text-align: center; border: 1px solid #eee; 
-            border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .site-name { color: #1a73e8; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
-        .login-input { 
-            width: 100%; height: 38px; padding: 8px; margin-bottom: 12px; 
-            border: 1px solid #ddd; border-radius: 5px; text-align: center; font-size: 14px; 
-        }
-        .login-btn { 
-            width: 100%; height: 38px; border: none; border-radius: 5px; 
-            background: #28a745; color: white; font-weight: bold; cursor: pointer; 
-        }
-
-        /* Main Application */
+        #login-page { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .login-box { width: 260px; padding: 25px; text-align: center; border: 1px solid #eee; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .site-name { color: #1a73e8; font-size: 19px; font-weight: bold; margin-bottom: 20px; }
+        .login-input { width: 100%; height: 40px; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; text-align: center; font-size: 15px; }
+        .login-btn { width: 100%; height: 40px; border: none; border-radius: 6px; background: #28a745; color: white; font-weight: bold; cursor: pointer; }
         #main-app { display: none; height: 100%; flex-direction: column; }
         .header { background: #1a73e8; color: white; padding: 12px; text-align: center; font-size: 19px; font-weight: bold; position: relative; }
         .back-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #28a745; color: white; padding: 4px 10px; border-radius: 5px; display: none; border: none; font-size: 14px; }
-
         .menu-area { padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 15px; flex-grow: 1; }
         .btn-container { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 3px 6px rgba(0,0,0,0.08); border: 1px solid #e0e4e8; width: 85%; max-width: 340px; text-align: center; }
         .btn { padding: 14px; border: none; border-radius: 10px; font-weight: bold; color: white; font-size: 17px; cursor: pointer; width: 100%; }
         .btn-green { background: #28a745; }
         .btn-pink { background: #e91e63; }
         .btn-gray { padding: 10px; background: #6c757d; font-size: 14px; margin-top: auto; margin-bottom: 25px; width: 85%; border-radius: 8px; color: white; border: none; }
-
-        /* Joma o Jer - Boro o Shposhto */
-        .shortcut-stats { display: flex; justify-content: space-around; margin-top: 15px; font-size: 17px; font-weight: 900; color: #000; }
-        .stat-joma { color: #1b5e20; } 
-        .stat-jer { color: #b71c1c; }  
-
-        /* List Area */
+        .shortcut-stats { display: flex; justify-content: space-around; margin-top: 15px; font-size: 18px; font-weight: 900; color: #000; }
+        .stat-joma { color: #1b5e20; } .stat-jer { color: #b71c1c; }  
         .list-container { flex-grow: 1; overflow-y: auto; padding: 12px; display: none; }
-        .item-card { padding: 15px; background: #fff; border: 1px solid #eee; margin-bottom: 8px; border-radius: 10px; font-weight: bold; text-align: center; font-size: 15px; }
-
+        .item-card { padding: 15px; background: #fff; border: 1px solid #eee; margin-bottom: 8px; border-radius: 10px; font-weight: bold; text-align: center; font-size: 16px; }
         .sheet-container { flex-grow: 1; display: none; flex-direction: column; overflow: hidden; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
@@ -57,10 +34,101 @@
     <div id="login-page">
         <div class="login-box">
             <div class="site-name">মেসার্স সাগর ফিস</div>
-            
             <div id="step1">
-                <input type="password" id="passInput" class="login-input" placeholder="পাসওয়ার্ড">
+                <input type="password" id="passInput" class="login-input" placeholder="পাসওয়ার্ড লিখুন">
                 <button class="login-btn" onclick="checkPass()">পরবর্তী</button>
             </div>
+            <div id="step2" style="display: none;">
+                <input type="number" id="codeInput" class="login-input" placeholder="৯৯৮৮৭৭ লিখুন">
+                <button class="login-btn" style="background: #1a73e8;" onclick="checkCode()">লগইন করুন</button>
+            </div>
+        </div>
+    </div>
 
-            <div id="step2" style="
+    <div id="main-app">
+        <div class="header">
+            <button id="backIcon" class="back-btn" onclick="handleBack()">← ফিরে যান</button>
+            <span id="topTitle">মেসার্স সাগর ফিস</span>
+        </div>
+        <div id="home-screen" class="menu-area">
+            <div class="btn-container">
+                <button class="btn btn-green" onclick="showList('Arat')">আড়ৎ এর হিসাব</button>
+                <div class="shortcut-stats">
+                    <span>জমা: <span class="stat-joma">৳ 0.0</span></span>
+                    <span>জের: <span class="stat-jer">৳ 0.0</span></span>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button class="btn btn-pink" onclick="showList('Company')">বিক্রয়ের হিসাব</button>
+                <div class="shortcut-stats">
+                    <span>জমা: <span class="stat-joma">৳ 0.0</span></span>
+                    <span>জের: <span class="stat-jer">৳ 0.0</span></span>
+                </div>
+            </div>
+            <button class="btn btn-gray" onclick="location.reload()">লগ আউট</button>
+        </div>
+        <div id="list-screen" class="list-container"><div id="list-items"></div></div>
+        <div id="sheet-screen" class="sheet-container"><iframe id="sheetFrame" src=""></iframe></div>
+    </div>
+
+<script>
+    // ফিক্সড ভেরিয়েবল
+    const MY_PASS = "sagar";
+    const MY_CODE = "998877"; 
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/10VFHqozMCUa6GlVzraUAloLex-NAHijfwfBl4rBHFSY/edit?rm=minimal";
+    
+    function checkPass() {
+        const p = document.getElementById('passInput').value;
+        if (p === MY_PASS) {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+        } else { alert("ভুল পাসওয়ার্ড!"); }
+    }
+
+    function checkCode() {
+        const c = document.getElementById('codeInput').value;
+        // String এ কনভার্ট করে চেক করা হচ্ছে যাতে ভুল না হয়
+        if (String(c) === MY_CODE) {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+        } else { alert("ভুল কোড! সঠিক কোডটি দিন।"); }
+    }
+
+    // আগের ফাংশনগুলো অপরিবর্তিত
+    function showList(type) {
+        document.getElementById('home-screen').style.display = 'none';
+        document.getElementById('list-screen').style.display = 'block';
+        document.getElementById('backIcon').style.display = 'block';
+        document.getElementById('topTitle').innerText = (type === 'Arat' ? "আড়ৎ তালিকা" : "কোম্পানি তালিকা");
+        const container = document.getElementById('list-items');
+        container.innerHTML = "";
+        const total = (type === 'Arat' ? 120 : 20);
+        const prefix = (type === 'Arat' ? "আড়ৎ" : "কোম্পানি");
+        for (let i = 1; i <= total; i++) {
+            let div = document.createElement('div');
+            div.className = 'item-card';
+            div.innerText = prefix + " " + i;
+            div.onclick = function() { openSheet(prefix + " " + i); };
+            container.appendChild(div);
+        }
+    }
+    function openSheet(name) {
+        document.getElementById('list-screen').style.display = 'none';
+        document.getElementById('sheet-screen').style.display = 'flex';
+        document.getElementById('topTitle').innerText = name;
+        document.getElementById('sheetFrame').src = SHEET_URL;
+    }
+    function handleBack() {
+        if (document.getElementById('sheet-screen').style.display === 'flex') {
+            document.getElementById('sheet-screen').style.display = 'none';
+            document.getElementById('list-screen').style.display = 'block';
+        } else {
+            document.getElementById('list-screen').style.display = 'none';
+            document.getElementById('home-screen').style.display = 'flex';
+            document.getElementById('backIcon').style.display = 'none';
+            document.getElementById('topTitle').innerText = "মেসার্স সাগর ফিস";
+        }
+    }
+</script>
+</body>
+</html>
