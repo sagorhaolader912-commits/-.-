@@ -6,29 +6,35 @@
     <title>মেসার্স সাগর ফিস</title>
     <style>
         * { box-sizing: border-box; }
-        body, html { margin: 0; padding: 0; height: 100vh; background: #f4f6f9; font-family: Arial, sans-serif; }
+        body, html { margin: 0; padding: 0; height: 100vh; background: #f4f6f9; font-family: 'Segoe UI', Arial, sans-serif; overflow-x: hidden; }
         
-        /* লগইন ডিজাইন - একদম সিম্পল */
+        /* লগইন ডিজাইন */
         #login-area { position: fixed; inset: 0; background: white; z-index: 1000; display: flex; align-items: center; justify-content: center; }
-        .box { width: 260px; padding: 30px; border: 1px solid #ddd; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .box { width: 280px; padding: 30px; border: 1px solid #ddd; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .title { color: #1a73e8; font-size: 20px; font-weight: bold; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; text-align: center; font-size: 16px; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; text-align: center; font-size: 16px; outline: none; }
         .go-btn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
         /* মেইন বডি */
-        #main-app { display: none; }
-        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 18px; }
+        #main-app { display: none; flex-direction: column; height: 100vh; }
+        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 18px; position: sticky; top: 0; z-index: 100; }
+        .back-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #28a745; color: white; padding: 5px 12px; border-radius: 6px; border: none; display: none; cursor: pointer; }
         
-        .menu-list { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px; }
-        .card { background: white; width: 90%; max-width: 350px; padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #eee; }
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; color: white; font-weight: bold; font-size: 18px; margin-bottom: 10px; }
+        .menu-list { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px; flex-grow: 1; overflow-y: auto; }
+        .card { background: white; width: 100%; max-width: 380px; padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 12px; color: white; font-weight: bold; font-size: 18px; margin-bottom: 12px; cursor: pointer; transition: 0.3s; }
         .btn-green { background: #28a745; }
         .btn-pink { background: #e91e63; }
 
-        /* জমা ও জের - ছোট ফন্ট */
-        .stats { font-size: 13px; font-weight: 600; line-height: 1.6; }
+        /* জমা ও জের - আপনার পছন্দের ছোট সাইজ */
+        .stats { font-size: 14px; font-weight: 600; line-height: 1.8; text-align: center; }
         .stat-joma { color: #2e7d32; display: block; }
         .stat-jer { color: #c62828; display: block; }
+
+        /* তালিকা এবং আইফ্রেম */
+        #list-screen, #sheet-screen { display: none; padding: 15px; flex-grow: 1; overflow-y: auto; }
+        .item-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #eee; text-align: center; font-weight: bold; cursor: pointer; }
+        iframe { width: 100%; height: 100%; border: none; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -43,36 +49,91 @@
     </div>
 
     <div id="main-app">
-        <div class="header">মেসার্স সাগর ফিস</div>
-        <div class="menu-list">
+        <div class="header">
+            <button id="backIcon" class="back-btn" onclick="handleBack()">← ফিরে যান</button>
+            <span id="topTitle">মেসার্স সাগর ফিস</span>
+        </div>
+
+        <div id="home-screen" class="menu-list">
             <div class="card">
-                <button class="btn btn-green">আড়ৎ এর হিসাব</button>
+                <button class="btn btn-green" onclick="showList('আড়ৎ')">আড়ৎ এর হিসাব</button>
                 <div class="stats">
                     <span class="stat-joma">মোট জমা: ৳ 0.0</span>
                     <span class="stat-jer">মোট জের: ৳ 0.0</span>
                 </div>
             </div>
             <div class="card">
-                <button class="btn btn-pink">বিক্রয়ের হিসাব</button>
+                <button class="btn btn-pink" onclick="showList('কোম্পানি')">বিক্রয়ের হিসাব</button>
                 <div class="stats">
                     <span class="stat-joma">মোট জমা: ৳ 0.0</span>
                     <span class="stat-jer">মোট জের: ৳ 0.0</span>
                 </div>
             </div>
+            <button style="margin-top: 20px; color: #888; border: none; background: none; text-decoration: underline;" onclick="location.reload()">লগ আউট</button>
+        </div>
+
+        <div id="list-screen"></div>
+
+        <div id="sheet-screen">
+            <iframe id="sheetFrame" src=""></iframe>
         </div>
     </div>
 
 <script>
-    function checkNow() {
-        const p = document.getElementById('pass').value;
-        const c = document.getElementById('code').value;
+    // ফিক্সড পাসওয়ার্ড ও কোড
+    const P = "sagar";
+    const C = "998877";
 
-        // চেক করার সময় কোনো ভুল যাতে না হয় তাই String() করা হয়েছে
-        if (p === "sagar" && String(c) === "998877") {
+    function checkNow() {
+        const pInput = document.getElementById('pass').value;
+        const cInput = document.getElementById('code').value;
+
+        if (pInput === P && String(cInput) === C) {
             document.getElementById('login-area').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
+            document.getElementById('main-app').style.display = 'flex';
         } else {
-            alert("ভুল তথ্য! পাসওয়ার্ড: sagar এবং কোড: 998877 দিন।");
+            alert("ভুল তথ্য! পাসওয়ার্ড ও কোড সঠিক ভাবে দিন।");
+        }
+    }
+
+    function showList(type) {
+        document.getElementById('home-screen').style.display = 'none';
+        document.getElementById('list-screen').style.display = 'block';
+        document.getElementById('backIcon').style.display = 'block';
+        document.getElementById('topTitle').innerText = type + " এর তালিকা";
+        
+        let listContainer = document.getElementById('list-screen');
+        listContainer.innerHTML = "";
+        let count = (type === 'আড়ৎ' ? 120 : 20);
+
+        for (let i = 1; i <= count; i++) {
+            let item = document.createElement('div');
+            item.className = 'item-card';
+            item.innerText = type + " " + i;
+            item.onclick = function() {
+                openSheet(type + " " + i);
+            };
+            listContainer.appendChild(item);
+        }
+    }
+
+    function openSheet(name) {
+        document.getElementById('list-screen').style.display = 'none';
+        document.getElementById('sheet-screen').style.display = 'block';
+        document.getElementById('topTitle').innerText = name;
+        // আপনার গুগল শিট লিঙ্কটি এখানে বসান
+        document.getElementById('sheetFrame').src = "https://docs.google.com/spreadsheets/d/10VFHqozMCUa6GlVzraUAloLex-NAHijfwfBl4rBHFSY/edit?rm=minimal";
+    }
+
+    function handleBack() {
+        if (document.getElementById('sheet-screen').style.display === 'block') {
+            document.getElementById('sheet-screen').style.display = 'none';
+            document.getElementById('list-screen').style.display = 'block';
+        } else {
+            document.getElementById('list-screen').style.display = 'none';
+            document.getElementById('home-screen').style.display = 'flex';
+            document.getElementById('backIcon').style.display = 'none';
+            document.getElementById('topTitle').innerText = "মেসার্স সাগর ফিস";
         }
     }
 </script>
