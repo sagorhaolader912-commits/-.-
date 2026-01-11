@@ -5,34 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>মেসার্স সাগর ফিস</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
         body { background: #eef2f7; margin: 0; display: flex; justify-content: center; padding: 10px; }
         .app-card { background: white; width: 100%; max-width: 450px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.15); min-height: 95vh; display: flex; flex-direction: column; }
-        .header { background: #007bff; color: white; padding: 20px; text-align: center; font-size: 20px; font-weight: bold; border-radius: 15px 15px 0 0; }
+        .header { background: #1a73e8; color: white; padding: 20px; text-align: center; font-size: 20px; font-weight: bold; border-radius: 15px 15px 0 0; }
         .content { padding: 20px; flex-grow: 1; }
-        
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
-        .show-pass { font-size: 14px; color: #555; display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 15px; cursor: pointer; }
-        
-        .btn { width: 100%; padding: 14px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; text-align: center; }
+        .show-pass { font-size: 14px; color: #555; display: flex; align-items: center; justify-content: center; gap: 8px; margin: 10px 0; cursor: pointer; }
+        .btn { width: 100%; padding: 14px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
         .btn-back { background: #6c757d; }
-        
-        #searchBox { border: 2px solid #007bff; position: sticky; top: 0; z-index: 10; margin-bottom: 15px; }
-        .list-item { background: #fdfdfd; padding: 15px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; font-weight: 500; transition: 0.2s; }
-        .list-item:hover { background: #e7f1ff; border-color: #007bff; }
-
-        #login-sec, #menu-sec, #year-sec { display: none; }
+        #searchBox { border: 2px solid #1a73e8; position: sticky; top: 0; z-index: 10; margin-bottom: 15px; }
+        .list-item { background: #fdfdfd; padding: 15px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; font-weight: 500; }
+        .list-item:hover { background: #e8f0fe; }
+        #login-sec, #menu-sec, #year-sec, #month-sec, #date-sec { display: none; }
     </style>
 </head>
 <body>
 
 <div class="app-card">
     <div class="header">মেসার্স সাগর ফিস</div>
-    
     <div class="content">
         <div id="login-sec" style="display: block;">
-            <input type="text" id="passInput" placeholder="পাসওয়ার্ড দিন (sagorfish)">
-            <input type="password" id="pinInput" placeholder="পিন কোড দিন (2026)">
+            <input type="password" id="passInput" placeholder="পাসওয়ার্ড লিখুন">
+            <input type="password" id="pinInput" placeholder="পিন কোড লিখুন">
             <label class="show-pass">
                 <input type="checkbox" onclick="toggleView()"> পাসওয়ার্ড ও পিন দেখুন
             </label>
@@ -46,77 +41,33 @@
         </div>
 
         <div id="year-sec">
-            <h3 id="sec-title">বছর বাছাই করুন</h3>
-            <input type="text" id="searchBox" onkeyup="searchData()" placeholder="তারিখ বা সাল খুঁজুন...">
+            <h3 id="sec-title">বাছাই করুন</h3>
+            <input type="text" id="searchBox" onkeyup="searchData()" placeholder="খুঁজুন (যেমন: ২০২৬ বা জানুয়ারি বা তারিখ)">
             <div id="list-container"></div>
-            <button class="btn btn-back" onclick="showSec('menu-sec')">পিছনে যান</button>
+            <button id="backBtn" class="btn btn-back">পিছনে যান</button>
         </div>
     </div>
 </div>
 
 <script>
-    function showSec(id) {
-        document.getElementById('login-sec').style.display = 'none';
-        document.getElementById('menu-sec').style.display = 'none';
-        document.getElementById('year-sec').style.display = 'none';
-        document.getElementById(id).style.display = 'block';
-    }
+    const sheetURL = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/edit?usp=sharing";
+    const months = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
 
     function toggleView() {
+        var p = document.getElementById("passInput");
         var n = document.getElementById("pinInput");
+        p.type = p.type === "password" ? "text" : "password";
         n.type = n.type === "password" ? "text" : "password";
     }
 
     function checkLogin() {
-        const pass = document.getElementById('passInput').value;
-        const pin = document.getElementById('pinInput').value;
-        
-        if(pass === "sagorfish" && pin === "2026") {
-            showSec('menu-sec');
-        } else {
-            alert("পাসওয়ার্ড বা পিন ভুল!");
-        }
+        if(document.getElementById('passInput').value === "sagorfish" && document.getElementById('pinInput').value === "2026") {
+            document.getElementById('login-sec').style.display = 'none';
+            document.getElementById('menu-sec').style.display = 'block';
+        } else { alert("ভুল পাসওয়ার্ড বা পিন!"); }
     }
 
     function openYears(title) {
+        document.getElementById('menu-sec').style.display = 'none';
+        document.getElementById('year-sec').style.display = 'block';
         document.getElementById('sec-title').innerText = title;
-        const container = document.getElementById('list-container');
-        container.innerHTML = "";
-        
-        for (let year = 2026; year <= 2035; year++) {
-            let div = document.createElement('div');
-            div.className = 'list-item';
-            div.innerHTML = `<span>📅 ${year} সালের ফাইল</span> ❯`;
-            div.onclick = () => openDates(year);
-            container.appendChild(div);
-        }
-        showSec('year-sec');
-    }
-
-    function openDates(year) {
-        document.getElementById('sec-title').innerText = year + " সালের তারিখসমূহ";
-        const container = document.getElementById('list-container');
-        container.innerHTML = "";
-        
-        // উদাহরণ তারিখসমূহ
-        const demoDates = ["11-01-2026", "12-01-2026", "13-01-2026"];
-        demoDates.forEach(date => {
-            let div = document.createElement('div');
-            div.className = 'list-item';
-            div.innerHTML = `<span>📝 তারিখ: ${date}</span> ❯`;
-            div.onclick = () => window.location.href = "https://docs.google.com/spreadsheets/"; 
-            container.appendChild(div);
-        });
-    }
-
-    function searchData() {
-        let input = document.getElementById('searchBox').value.toLowerCase();
-        let items = document.getElementsByClassName('list-item');
-        for (let i = 0; i < items.length; i++) {
-            items[i].style.display = items[i].innerText.toLowerCase().includes(input) ? "" : "none";
-        }
-    }
-</script>
-
-</body>
-</html>
