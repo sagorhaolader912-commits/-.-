@@ -2,134 +2,123 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>মেসার্স সাগর ফিস</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { background: #eef2f7; margin: 0; display: flex; justify-content: center; padding: 10px; height: 100vh; overflow: hidden; }
-        .app-card { background: white; width: 100%; max-width: 500px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.15); display: flex; flex-direction: column; height: 100%; }
-        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-size: 18px; font-weight: bold; border-radius: 15px 15px 0 0; display: flex; justify-content: space-between; align-items: center; }
-        .content { padding: 15px; flex-grow: 1; overflow-y: auto; position: relative; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; text-align: center; }
-        .show-pass { font-size: 14px; color: #555; display: flex; align-items: center; justify-content: center; gap: 8px; margin: 10px 0; cursor: pointer; }
-        .btn { width: 100%; padding: 14px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
-        .btn-back-top { background: #6c757d; padding: 8px 15px; font-size: 14px; border-radius: 5px; color: white; border: none; cursor: pointer; }
-        #searchBox { border: 2px solid #1a73e8; position: sticky; top: 0; z-index: 10; background: white; }
-        .list-item { background: #fdfdfd; padding: 15px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; font-weight: 500; }
-        .list-item:hover { background: #e8f0fe; }
-        #sheet-frame { width: 100%; height: 100%; border: none; display: none; }
-        #login-sec, #menu-sec, #data-sec { display: none; height: 100%; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body, html { margin: 0; padding: 0; height: 100vh; background: #f0f2f5; overflow: hidden; }
+        
+        /* লগইন এরিয়া */
+        #login-area { position: fixed; inset: 0; background: #fff; z-index: 1000; display: flex; align-items: center; justify-content: center; }
+        .login-box { width: 80%; max-width: 280px; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border: 1px solid #eee; }
+        .login-input { width: 100%; padding: 10px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 6px; text-align: center; font-size: 15px; outline: none; }
+        .go-btn { width: 100%; padding: 10px; background: #1a73e8; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
+        /* মেইন অ্যাপ এরিয়া */
+        #main-app { display: none; flex-direction: column; height: 100vh; }
+        .header { background: #1a73e8; color: white; padding: 12px; text-align: center; font-weight: bold; font-size: 16px; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .back-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #fff; color: #1a73e8; padding: 4px 8px; border-radius: 4px; border: none; font-size: 12px; display: none; font-weight: bold; cursor: pointer; }
+
+        /* ড্যাশবোর্ড সামারি */
+        .summary-card { background: #fff; margin: 8px; padding: 10px; border-radius: 10px; box-shadow: 0 1px 5px rgba(0,0,0,0.05); }
+        .summary-row { display: flex; justify-content: space-between; gap: 8px; }
+        .sum-box { flex: 1; padding: 8px; border-radius: 6px; text-align: center; color: white; }
+        .bg-green { background: #218838; }
+        .bg-pink { background: #d81b60; }
+        .sum-title { font-size: 10px; display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .sum-val { font-size: 16px; font-weight: bold; }
+
+        /* মেনু লিস্ট */
+        .menu-list { padding: 10px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex-grow: 1; }
+        .card-item { background: white; padding: 12px 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 500; cursor: pointer; border-left: 4px solid #1a73e8; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .card-item:active { background: #f9f9f9; transform: scale(0.98); }
+        .arrow { color: #ccc; font-size: 12px; }
+
+        /* শিট স্ক্রিন */
+        #sheet-screen { display: none; flex-grow: 1; width: 100%; height: 100%; }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
-<div class="app-card">
-    <div class="header">
-        <button id="topBackBtn" class="btn-back-top" style="visibility: hidden;">❮ পিছনে</button>
-        <span>মেসার্স সাগর ফিস</span>
-        <div style="width: 50px;"></div>
+    <div id="login-area">
+        <div class="login-box">
+            <h3 style="margin-top:0; color:#1a73e8;">মেসার্স সাগর ফিস</h3>
+            <input type="password" id="passInput" class="login-input" placeholder="পিন কোড লিখুন">
+            <button class="go-btn" onclick="checkLogin()">প্রবেশ করুন</button>
+        </div>
     </div>
-    
-    <div class="content" id="mainContent">
-        <div id="login-sec" style="display: block;">
-            <input type="password" id="passInput" placeholder="পাসওয়ার্ড লিখুন">
-            <input type="password" id="pinInput" placeholder="পিন কোড লিখুন">
-            <label class="show-pass">
-                <input type="checkbox" id="toggleCheck"> পাসওয়ার্ড ও পিন দেখুন
-            </label>
-            <button class="btn" onclick="checkLogin()">প্রবেশ করুন</button>
+
+    <div id="main-app">
+        <div class="header">
+            <button id="backBtn" class="back-btn" onclick="goBack()">Back</button>
+            <span id="title-text">মেসার্স সাগর ফিস</span>
         </div>
 
-        <div id="menu-sec">
-            <button class="btn" onclick="openYears('আড়ৎ-এর হিসাব')">আড়ৎ-এর হিসাব</button>
-            <button class="btn" onclick="openYears('বিক্রয় হিসাব')">বিক্রয় হিসাব</button>
-            <button class="btn" style="background:#d93025" onclick="location.reload()">লগ আউট</button>
+        <div id="dashboard-content">
+            <div class="summary-card">
+                <div class="summary-row">
+                    <div class="sum-box bg-green">
+                        <span class="sum-title">আজকের জমা</span>
+                        <span class="sum-val">৳ ৫০,০০০</span>
+                    </div>
+                    <div class="sum-box bg-pink">
+                        <span class="sum-title">আজকের খরচ</span>
+                        <span class="sum-val">৳ ১২,৫০০</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-list">
+                <div class="card-item" onclick="openSheet('লিংক_এখানে_দিন', 'ক্যাশ মেমো')">
+                    <span>ক্যাশ মেমো</span>
+                    <span class="arrow">▶</span>
+                </div>
+                <div class="card-item" onclick="openSheet('লিংক_এখানে_দিন', 'স্টক রিপোর্ট')">
+                    <span>স্টক রিপোর্ট</span>
+                    <span class="arrow">▶</span>
+                </div>
+                <div class="card-item" onclick="openSheet('লিংক_এখানে_দিন', 'খরচের হিসাব')">
+                    <span>খরচের হিসাব</span>
+                    <span class="arrow">▶</span>
+                </div>
+            </div>
         </div>
 
-        <div id="data-sec">
-            <input type="text" id="searchBox" onkeyup="searchData()" placeholder="খুঁজুন (সাল বা তারিখ)...">
-            <div id="list-container"></div>
+        <div id="sheet-screen">
+            <iframe id="sheet-frame" src=""></iframe>
         </div>
-
-        <iframe id="sheet-frame"></iframe>
     </div>
-</div>
 
-<script>
-    const sheetURL = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/edit?usp=sharing";
-    const months = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
-    const topBack = document.getElementById('topBackBtn');
-
-    document.getElementById('toggleCheck').addEventListener('change', function() {
-        const type = this.checked ? 'text' : 'password';
-        document.getElementById('passInput').type = type;
-        document.getElementById('pinInput').type = type;
-    });
-
-    function checkLogin() {
-        if(document.getElementById('passInput').value === "sagorfish" && document.getElementById('pinInput').value === "2026") {
-            showSec('menu-sec');
-        } else { alert("ভুল তথ্য!"); }
-    }
-
-    function showSec(id) {
-        document.querySelectorAll('.content > div, iframe').forEach(el => el.style.display = 'none');
-        document.getElementById(id).style.display = 'block';
-        topBack.style.visibility = (id === 'login-sec' || id === 'menu-sec') ? 'hidden' : 'visible';
-    }
-
-    function openYears(title) {
-        showSec('data-sec');
-        const container = document.getElementById('list-container');
-        container.innerHTML = "";
-        for (let y = 2026; y <= 2035; y++) {
-            let div = document.createElement('div');
-            div.className = 'list-item';
-            div.innerHTML = `<span>📅 ${y} সাল</span> ❯`;
-            div.onclick = () => openMonths(y, title);
-            container.appendChild(div);
+    <script>
+        // লগইন ফাংশন (পিন: 1234 দেওয়া আছে, পরিবর্তন করে নিবেন)
+        function checkLogin() {
+            const pin = document.getElementById('passInput').value;
+            if(pin === "1234") {
+                document.getElementById('login-area').style.display = 'none';
+                document.getElementById('main-app').style.display = 'flex';
+            } else {
+                alert("ভুল পিন! আবার চেষ্টা করুন।");
+            }
         }
-        topBack.onclick = () => showSec('menu-sec');
-    }
 
-    function openMonths(year, title) {
-        const container = document.getElementById('list-container');
-        container.innerHTML = "";
-        months.forEach(m => {
-            let div = document.createElement('div');
-            div.className = 'list-item';
-            div.innerHTML = `<span>📅 ${m}</span> ❯`;
-            div.onclick = () => openDates(m, year, title);
-            container.appendChild(div);
-        });
-        topBack.onclick = () => openYears(title);
-    }
-
-    function openDates(month, year, title) {
-        const container = document.getElementById('list-container');
-        container.innerHTML = "";
-        for (let i = 1; i <= 31; i++) {
-            let div = document.createElement('div');
-            div.className = 'list-item';
-            div.innerHTML = `<span>📝 ${i}-${month}-${year}</span> ❯`;
-            div.onclick = () => {
-                const iframe = document.getElementById('sheet-frame');
-                iframe.src = sheetURL;
-                showSec('sheet-frame');
-                topBack.onclick = () => openDates(month, year, title);
-            };
-            container.appendChild(div);
+        // গুগল শিট বা মেনু ওপেন করার ফাংশন
+        function openSheet(url, title) {
+            document.getElementById('dashboard-content').style.display = 'none';
+            document.getElementById('sheet-screen').style.display = 'block';
+            document.getElementById('backBtn').style.display = 'block';
+            document.getElementById('title-text').innerText = title;
+            document.getElementById('sheet-frame').src = url;
         }
-        topBack.onclick = () => openMonths(year, title);
-    }
 
-    function searchData() {
-        let input = document.getElementById('searchBox').value.toLowerCase();
-        let items = document.getElementsByClassName('list-item');
-        for (let i = 0; i < items.length; i++) {
-            items[i].style.display = items[i].innerText.toLowerCase().includes(input) ? "" : "none";
+        // ব্যাকে যাওয়ার ফাংশন
+        function goBack() {
+            document.getElementById('dashboard-content').style.display = 'block';
+            document.getElementById('sheet-screen').style.display = 'none';
+            document.getElementById('backBtn').style.display = 'none';
+            document.getElementById('title-text').innerText = "মেসার্স সাগর ফিস";
+            document.getElementById('sheet-frame').src = "";
         }
-    }
-</script>
+    </script>
 </body>
 </html>
