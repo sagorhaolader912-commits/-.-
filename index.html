@@ -3,153 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>মেসার্স সাগর ফিস - অফিসিয়াল</title>
+    <title>মেসার্স সাগর ফিস - অফিশিয়াল</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
-        body { background: #f4f7f9; margin: 0; padding: 0; display: flex; justify-content: center; height: 100vh; }
-        .app-container { background: white; width: 100%; max-width: 480px; height: 100vh; display: flex; flex-direction: column; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
-        .top-bar { background: #1a73e8; color: white; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; font-weight: bold; font-size: 18px; }
-        .main-view { flex: 1; overflow-y: auto; padding: 20px; position: relative; }
-        .input-group { margin-bottom: 15px; }
-        input[type="password"], input[type="text"] { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; text-align: center; background: #fff; }
-        .show-toggle { font-size: 14px; color: #666; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 5px; cursor: pointer; }
-        .action-btn { width: 100%; padding: 15px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .back-nav { background: #555; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; visibility: hidden; }
-        .search-input { border: 2px solid #1a73e8; position: sticky; top: 0; background: white; z-index: 10; margin-bottom: 15px; }
-        .data-card { background: #fff; padding: 16px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; font-weight: bold; border-left: 5px solid #1a73e8; }
-        #google-sheet-viewer { width: 100%; height: 100%; border: none; display: none; }
-        #login-box, #menu-box, #list-box { display: none; }
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #28a745;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+        .navbar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .main-content {
+            max-width: 1000px;
+            margin: 20px auto;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 5px;
+        }
+        .admin-panel {
+            margin-top: 20px;
+            padding: 20px;
+            border-top: 2px dashed #ccc;
+            text-align: center;
+        }
+        .edit-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 25px;
+            display: inline-block;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .footer-text {
+            font-size: 12px;
+            color: #777;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <div class="top-bar">
-        <button id="btnBack" class="back-nav" onclick="handleBack()">❮ পিছনে</button>
-        <span>মেসার্স সাগর ফিস</span>
-        <div style="width: 50px;"></div>
+    <div class="navbar">
+        মেসার্স সাগর ফিস - ডিজিটাল ড্যাশবোর্ড
     </div>
-    
-    <div class="main-view">
-        <div id="login-box" style="display: block;">
-            <div class="input-group">
-                <input type="password" id="userPass" placeholder="পাসওয়ার্ড দিন">
-            </div>
-            <div class="input-group">
-                <input type="password" id="userPin" placeholder="পিন কোড দিন">
-            </div>
-            <label class="show-toggle">
-                <input type="checkbox" id="eyeToggle"> পাসওয়ার্ড ও পিন দেখুন
-            </label>
-            <button class="action-btn" onclick="checkAuth()">প্রবেশ করুন</button>
-        </div>
 
-        <div id="menu-box">
-            <button class="action-btn" onclick="startProcess('আড়ৎ-এর হিসাব')" style="margin-bottom:15px">আড়ৎ-এর হিসাব</button>
-            <button class="action-btn" onclick="startProcess('বিক্রয় হিসাব')" style="margin-bottom:15px">বিক্রয় হিসাব</button>
-            <button class="action-btn" style="background:#d32f2f" onclick="location.reload()">লগ আউট</button>
+    <div class="main-content">
+        <iframe src="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/pubhtml?widget=true&headers=false"></iframe>
+        
+        <div class="admin-panel">
+            <p style="margin-bottom: 15px; font-weight: bold; color: #333;">অ্যাডমিনদের জন্য (মোবাইল/পিসি এডিট)</p>
+            <a href="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit" target="_blank" class="edit-button">
+            হিসাব এডিট করুন
+        </a>
+            <p class="footer-text">সতর্কতা: শুধুমাত্র অনুমোদিত অ্যাডমিনরাই এডিট করতে পারবেন।</p>
         </div>
-
-        <div id="list-box">
-            <input type="text" id="findBox" class="search-input" onkeyup="filterList()" placeholder="খুঁজুন...">
-            <div id="item-render-area"></div>
-        </div>
-
-        <iframe id="google-sheet-viewer"></iframe>
     </div>
-</div>
 
-<script>
-    const TARGET_URL = "https://docs.google.com/spreadsheets/d/1jMOhvqNJMWrGjrwm3DVylQl9tBRHqP3KOKJNzkHABls/edit?usp=sharing";
-    let appState = "LOGIN";
-    let flowTitle = "";
-    let flowYear = "";
-
-    // শো পাসওয়ার্ড লজিক
-    document.getElementById('eyeToggle').addEventListener('change', function() {
-        const type = this.checked ? 'text' : 'password';
-        document.getElementById('userPass').type = type;
-        document.getElementById('userPin').type = type;
-    });
-
-    function checkAuth() {
-        const p = document.getElementById('userPass').value;
-        const n = document.getElementById('userPin').value;
-        if(p === "sagorfish" && n === "2026") {
-            switchView('menu-box');
-            appState = "MENU";
-        } else {
-            alert("ভুল পাসওয়ার্ড বা পিন! সঠিক তথ্য দিয়ে চেষ্টা করুন।");
-        }
-    }
-
-    function switchView(id) {
-        document.getElementById('login-box').style.display = 'none';
-        document.getElementById('menu-box').style.display = 'none';
-        document.getElementById('list-box').style.display = 'none';
-        document.getElementById('google-sheet-viewer').style.display = 'none';
-        document.getElementById(id).style.display = 'block';
-        document.getElementById('btnBack').style.visibility = (id==='login-box' || id==='menu-box') ? 'hidden' : 'visible';
-    }
-
-    function startProcess(title) {
-        flowTitle = title;
-        switchView('list-box');
-        appState = "YEARS";
-        showYears();
-    }
-
-    function showYears() {
-        const area = document.getElementById('item-render-area');
-        area.innerHTML = "";
-        for(let y=2026; y<=2035; y++) {
-            let d = document.createElement('div');
-            d.className='data-card'; d.innerHTML=`<span>📅 ${y} সাল</span> ❯`;
-            d.onclick = () => { flowYear=y; showMonths(); appState="MONTHS"; };
-            area.appendChild(d);
-        }
-    }
-
-    function showMonths() {
-        const area = document.getElementById('item-render-area');
-        area.innerHTML = "";
-        const mList = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
-        mList.forEach(m => {
-            let d = document.createElement('div');
-            d.className='data-card'; d.innerHTML=`<span>📅 ${m}</span> ❯`;
-            d.onclick = () => { showDates(m); appState="DATES"; };
-            area.appendChild(d);
-        });
-    }
-
-    function showDates(m) {
-        const area = document.getElementById('item-render-area');
-        area.innerHTML = "";
-        for(let i=1; i<=31; i++) {
-            let d = document.createElement('div');
-            d.className='data-card'; d.innerHTML=`<span>📝 ${i}-${m}-${flowYear}</span> ❯`;
-            d.onclick = () => { 
-                const f = document.getElementById('google-sheet-viewer');
-                f.src = TARGET_URL; switchView('google-sheet-viewer'); appState="SHEET";
-            };
-            area.appendChild(d);
-        }
-    }
-
-    function handleBack() {
-        if(appState === "SHEET") { switchView('list-box'); appState="DATES"; }
-        else if(appState === "DATES") { showMonths(); appState="MONTHS"; }
-        else if(appState === "MONTHS") { showYears(); appState="YEARS"; }
-        else if(appState === "YEARS") { switchView('menu-box'); appState="MENU"; }
-    }
-
-    function filterList() {
-        let val = document.getElementById('findBox').value.toLowerCase();
-        let items = document.getElementsByClassName('data-card');
-        for(let i=0; i<items.length; i++) {
-            items[i].style.display = items[i].innerText.toLowerCase().includes(val) ? "" : "none";
-        }
-    }
-</script>
 </body>
 </html>
